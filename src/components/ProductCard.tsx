@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { ShoppingBag, Heart, Star, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Heart, Star, FileText } from 'lucide-react';
 import { formatPrice } from '../utils/currency';
 
 interface ProductCardProps {
@@ -41,86 +41,134 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, isDark, viewM
     } catch {}
   };
 
+  const inStock = product.stock > 0;
+  const lowStock = product.stock > 0 && product.stock <= 10;
+  const skuCode = `BM-${String(product.id).slice(-8).toUpperCase()}`;
+
   if (viewMode === 'list') {
     return (
-      <div className={`group relative flex gap-0 p-2 rounded-2xl border overflow-hidden transition-all hover:shadow-xl ${isDark ? 'bg-zinc-900 border-white/10 hover:border-yellow-400/30' : 'bg-white border-slate-200 hover:border-slate-300'}`}>
+      <div className={`group flex gap-0 rounded-lg border overflow-hidden transition-all duration-200 ${
+        isDark
+          ? 'bg-zinc-900 border-white/8 hover:border-yellow-400/20 hover:shadow-lg hover:shadow-black/30'
+          : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md hover:shadow-slate-100'
+      }`}>
         {/* Image */}
-        <div className={`w-36 h-36 flex-shrink-0 rounded-xl flex items-center justify-center ${isDark ? 'bg-white/[0.02]' : 'bg-slate-50'}`}>
+        <div className={`w-40 flex-shrink-0 flex items-center justify-center p-3 ${isDark ? 'bg-zinc-800/60' : 'bg-slate-50'}`}>
           <img
             src={product.image}
             alt={product.name}
-            className="max-h-full max-w-full object-contain"
+            className="max-h-32 max-w-full object-contain"
             referrerPolicy="no-referrer"
           />
         </div>
 
         {/* Content */}
-        <div className="flex-1 flex flex-col justify-between py-1">
+        <div className="flex-1 flex flex-col justify-between p-4 py-3">
           <div>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">
-                  {product.category} • SKU: BM-{String(product.id).slice(-6).toUpperCase()}
-                </span>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={`text-[10px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                    {product.category}
+                  </span>
+                  <span className={`text-[10px] font-mono ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
+                    {skuCode}
+                  </span>
+                  {/* Stock badge */}
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-wide ${
+                    lowStock
+                      ? 'bg-amber-100 text-amber-700'
+                      : inStock
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : isDark ? 'bg-zinc-700 text-slate-400' : 'bg-slate-100 text-slate-500'
+                  }`}>
+                    {lowStock ? 'LOW STOCK' : inStock ? 'IN STOCK' : 'OUT OF STOCK'}
+                  </span>
+                </div>
                 <Link to={`/product/${product.id}`}>
-                  <h3 className={`font-bold text-lg leading-snug mt-1 transition-colors ${isDark ? 'text-white group-hover:text-yellow-400' : 'text-slate-900 group-hover:text-yellow-500'}`}>
+                  <h3 className={`font-semibold text-base leading-snug transition-colors ${
+                    isDark ? 'text-slate-100 hover:text-yellow-400' : 'text-slate-800 hover:text-yellow-600'
+                  }`}>
                     {product.name}
                   </h3>
                 </Link>
+                {product.desc && (
+                  <p className={`text-xs mt-1.5 line-clamp-2 leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    {product.desc}
+                  </p>
+                )}
               </div>
               <button
                 onClick={handleWishlist}
-                className={`p-2 rounded-full transition-all ${isWishlisted ? 'bg-red-500 text-white' : isDark ? 'bg-black/40 text-white hover:bg-black/60' : 'bg-white text-slate-400 hover:text-red-500 shadow-md'}`}
+                className={`flex-shrink-0 w-8 h-8 rounded flex items-center justify-center transition-colors ${
+                  isWishlisted
+                    ? 'text-red-500'
+                    : isDark ? 'text-slate-600 hover:text-slate-400' : 'text-slate-300 hover:text-slate-500'
+                }`}
               >
                 <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
               </button>
             </div>
-            
-            {product.desc && (
-              <p className={`text-sm mt-2 line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                {product.desc}
-              </p>
-            )}
           </div>
 
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-4">
-              <span className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          <div className={`flex items-center justify-between mt-3 pt-3 border-t ${isDark ? 'border-white/5' : 'border-slate-100'}`}>
+            <div className="flex items-baseline gap-2">
+              <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 {formatPrice(product.price)}
               </span>
+              <span className={`text-xs ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>/ unit</span>
               {product.originalPrice && (
-                <span className={`text-sm font-medium line-through ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                <span className={`text-sm line-through ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
                   {formatPrice(product.originalPrice)}
                 </span>
               )}
               {product.discount && (
-                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded">
+                <span className="text-[10px] font-bold bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded">
                   {product.discount} OFF
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3">
-              <Link 
-                to={`/product/${product.id}`}
-                className={`px-4 py-2 rounded-xl border text-sm font-bold transition-colors ${isDark ? 'border-white/10 text-white hover:border-yellow-400' : 'border-slate-200 text-slate-900 hover:border-slate-400'}`}
+            <div className="flex items-center gap-2">
+              <Link
+                to="/rfqs"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded border text-xs font-semibold transition-colors ${
+                  isDark
+                    ? 'border-white/10 text-slate-300 hover:border-yellow-400/30 hover:text-yellow-400'
+                    : 'border-slate-200 text-slate-600 hover:border-yellow-400 hover:text-yellow-600'
+                }`}
               >
-                View Details
+                <FileText className="w-3.5 h-3.5" />
+                Get Quote
+              </Link>
+              <Link
+                to={`/product/${product.id}`}
+                className={`px-3 py-2 rounded border text-xs font-semibold transition-colors ${
+                  isDark
+                    ? 'border-white/10 text-slate-300 hover:border-white/20'
+                    : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                }`}
+              >
+                Details
               </Link>
               <button
                 onClick={handleAdd}
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                disabled={!inStock}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold transition-all ${
                   added
-                    ? 'bg-green-500 text-white'
-                    : 'bg-yellow-400 text-black hover:bg-yellow-300'
+                    ? 'bg-emerald-500 text-white'
+                    : inStock
+                      ? 'bg-yellow-400 text-black hover:bg-yellow-300'
+                      : isDark ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed' : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                 }`}
               >
                 {added ? (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
-                  <ShoppingBag className="w-5 h-5" />
+                  <ShoppingBag className="w-3.5 h-3.5" />
                 )}
+                {added ? 'Added' : 'Add to Cart'}
               </button>
             </div>
           </div>
@@ -131,106 +179,155 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, isDark, viewM
 
   // Grid View
   return (
-    <div className={`group relative rounded-2xl border overflow-hidden transition-all hover:shadow-xl ${isDark ? 'bg-zinc-900 border-white/10 hover:border-yellow-400/30' : 'bg-white border-slate-200 hover:border-slate-300'}`}>
-      {/* Image Section */}
-      <div className={`relative h-44 flex items-center justify-center p-2 ${isDark ? 'bg-white/[0.02]' : 'bg-slate-50'}`}>
+    <div className={`group relative flex flex-col rounded-lg border overflow-hidden transition-all duration-200 ${
+      isDark
+        ? 'bg-zinc-900 border-white/8 hover:border-yellow-400/20 hover:shadow-xl hover:shadow-black/40'
+        : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-100'
+    }`}>
+      {/* Image */}
+      <div className={`relative h-44 flex items-center justify-center p-4 ${isDark ? 'bg-zinc-800/50' : 'bg-slate-50'}`}>
         <img
           src={product.image}
           alt={product.name}
-          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-[1.04]"
           referrerPolicy="no-referrer"
         />
-        
-        {/* Wishlist Button */}
-        <button
-          onClick={handleWishlist}
-          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all ${isWishlisted ? 'bg-red-500 text-white' : isDark ? 'bg-black/40 text-white hover:bg-black/60' : 'bg-white/90 text-slate-400 hover:text-red-500 shadow-md'}`}
-        >
-          <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
-        </button>
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
-          {product.discount && (
-            <span className="bg-red-500 text-white text-[9px] font-bold px-2 py-1 rounded">
-              {product.discount} OFF
-            </span>
-          )}
-          <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${isDark ? 'bg-black/60 text-white' : 'bg-white/90 text-slate-600'}`}>
-            {product.category}
+        {/* Stock badge */}
+        <div className="absolute top-2 left-2">
+          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-wide ${
+            lowStock
+              ? 'bg-amber-400/90 text-amber-900'
+              : inStock
+                ? 'bg-emerald-500/90 text-white'
+                : 'bg-zinc-600/90 text-zinc-300'
+          }`}>
+            {lowStock ? 'LOW STOCK' : inStock ? 'IN STOCK' : 'OUT OF STOCK'}
           </span>
         </div>
 
-        {/* Quick View Overlay */}
-        <Link 
-          to={`/product/${product.id}`} 
-          className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40"
-        >
-          <span className="px-4 py-2 bg-white text-black text-xs font-bold rounded-lg shadow-lg">
-            Quick View
-          </span>
-        </Link>
-      </div>
-
-      {/* Content Section */}
-      <div className="px-2 pb-2 space-y-2">
-        {/* Rating */}
-        {product.rating != null && (
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star 
-                  key={star} 
-                  className={`w-3 h-3 ${star <= Math.round(product.rating) ? 'text-yellow-400 fill-current' : 'text-slate-300'}`} 
-                />
-              ))}
-            </div>
-            <span className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-              ({product.reviews || 0})
+        {/* Discount badge */}
+        {product.discount && (
+          <div className="absolute top-2 right-8">
+            <span className="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm">
+              {product.discount}
             </span>
           </div>
         )}
 
-        {/* Product Name */}
+        {/* Wishlist */}
+        <button
+          onClick={handleWishlist}
+          className={`absolute top-2 right-2 w-7 h-7 rounded flex items-center justify-center transition-colors ${
+            isWishlisted
+              ? 'text-red-500'
+              : isDark ? 'text-zinc-600 hover:text-zinc-400' : 'text-slate-300 hover:text-slate-500'
+          }`}
+        >
+          <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
+        </button>
+
+        {/* Quick view */}
+        <Link
+          to={`/product/${product.id}`}
+          className="absolute inset-0 z-10 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-gradient-to-t from-black/50 to-transparent"
+        >
+          <span className="px-4 py-1.5 bg-white text-black text-[11px] font-semibold rounded tracking-wide shadow-lg">
+            View Details
+          </span>
+        </Link>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-3">
+        {/* Category + SKU row */}
+        <div className="flex items-center justify-between mb-1.5">
+          <span className={`text-[10px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+            {product.category}
+          </span>
+          <span className={`text-[10px] font-mono ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>
+            {skuCode}
+          </span>
+        </div>
+
+        {/* Name */}
         <Link to={`/product/${product.id}`}>
-          <h3 className={`font-bold text-sm leading-snug line-clamp-2 transition-colors ${isDark ? 'text-white group-hover:text-yellow-400' : 'text-slate-900 group-hover:text-yellow-500'}`}>
+          <h3 className={`font-semibold text-sm leading-snug line-clamp-2 transition-colors mb-1.5 ${
+            isDark ? 'text-slate-100 hover:text-yellow-400' : 'text-slate-800 hover:text-yellow-600'
+          }`}>
             {product.name}
           </h3>
         </Link>
 
-        {/* SKU */}
-        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">
-          SKU: BM-{String(product.id).slice(-6).toUpperCase()}
-        </span>
-
-        {/* Price & Add Button */}
-        <div className="flex items-center justify-between pt-2">
-          <div>
-<span className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {formatPrice(product.price)}
-              </span>
-              {product.originalPrice && (
-                <span className={`ml-2 text-sm font-medium line-through ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                  {formatPrice(product.originalPrice)}
-              </span>
-            )}
+        {/* Rating */}
+        {product.rating != null && (
+          <div className="flex items-center gap-1.5 mb-2">
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={`w-2.5 h-2.5 ${star <= Math.round(product.rating) ? 'text-yellow-400 fill-current' : isDark ? 'text-zinc-700' : 'text-slate-200'}`}
+                />
+              ))}
+            </div>
+            <span className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              {product.rating.toFixed(1)} ({product.reviews || 0})
+            </span>
           </div>
-          <button
-            onClick={handleAdd}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              added
-                ? 'bg-green-500 text-white'
-                : 'bg-yellow-400 text-black hover:bg-yellow-300'
+        )}
+
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Pricing */}
+        <div className={`pt-2.5 mt-2 border-t ${isDark ? 'border-white/5' : 'border-slate-100'}`}>
+          <div className="flex items-end justify-between mb-2">
+            <div>
+              <div className={`text-lg font-bold leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                {formatPrice(product.price)}
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`text-[10px] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>/ unit</span>
+                {product.originalPrice && (
+                  <span className={`text-[10px] line-through ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
+                    {formatPrice(product.originalPrice)}
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={handleAdd}
+              disabled={!inStock}
+              className={`w-8 h-8 rounded flex items-center justify-center transition-all ${
+                added
+                  ? 'bg-emerald-500 text-white'
+                  : inStock
+                    ? 'bg-yellow-400 text-black hover:bg-yellow-300'
+                    : isDark ? 'bg-zinc-700 text-zinc-500 cursor-not-allowed' : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+              }`}
+            >
+              {added ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                <ShoppingBag className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+
+          {/* Get Quote CTA */}
+          <Link
+            to="/rfqs"
+            className={`flex items-center justify-center gap-1.5 w-full py-1.5 rounded border text-[11px] font-semibold transition-colors ${
+              isDark
+                ? 'border-white/8 text-slate-400 hover:border-yellow-400/30 hover:text-yellow-400'
+                : 'border-slate-200 text-slate-500 hover:border-yellow-400 hover:text-yellow-600'
             }`}
           >
-            {added ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            ) : (
-              <ShoppingBag className="w-5 h-5" />
-            )}
-          </button>
+            <FileText className="w-3 h-3" />
+            Request Quote
+          </Link>
         </div>
       </div>
     </div>
