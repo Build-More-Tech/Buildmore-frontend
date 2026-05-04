@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Search, ChevronLeft, ChevronRight, X, Star, ChevronDown, Heart, Layers, Package, ArrowRight, Loader2, Filter, Grid3X3, List, Box, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, ChevronDown, Heart, Layers, Package, ArrowRight, Loader2, Filter, Grid3X3, List, Box, Info } from 'lucide-react';
 import { useSearchParams, Link, useParams } from 'react-router-dom';
 import { SEO } from '../components/SEO';
+import { SearchBar } from '../components/SearchBar';
 import { productApi, categoryApi, BackendProduct, Category } from '../api';
 import { normalizeProduct } from '../utils/normalizeProduct';
 import { getCategoryMeta } from '../utils/categoryMeta';
@@ -264,16 +265,18 @@ export const Products: React.FC = () => {
         {/* Right: Controls */}
         <div className="flex items-center gap-2 ml-auto">
           {/* Top Bar Search */}
-          <div className={`relative w-28 sm:w-48 flex items-center px-3 py-1.5 rounded-xl border ${isDark ? 'bg-zinc-900 border-white/10 focus-within:border-yellow-400/50' : 'bg-slate-50 border-slate-200 focus-within:border-yellow-400'} transition-all`}>
-            <Search className="w-3 h-3 text-slate-500 shrink-0" />
-            <input
-              type="text"
+          <div className="w-44 sm:w-72 lg:w-80">
+            <SearchBar
+              products={products}
+              categories={categories}
               value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search..."
-              className={`flex-1 bg-transparent px-2 text-[9px] font-black uppercase outline-none ${isDark ? 'text-white placeholder-slate-700' : 'text-slate-900 placeholder-slate-400'}`}
+              onChange={setSearch}
+              onSelectCategory={cat => {
+                setSelectedCategory(cat.name);
+                setSelectedSubcategory(null);
+                setSearch('');
+              }}
             />
-            {search && <button onClick={() => setSearch('')}><X className="w-2.5 h-2.5 text-slate-500" /></button>}
           </div>
 
           {/* Sub Category Dropdown */}

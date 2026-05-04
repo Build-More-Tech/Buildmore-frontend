@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, MapPin, ShoppingCart, ChevronDown, Sun, Moon, LogOut, ShieldCheck, User, Package, FileText, Heart, ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { SearchBar } from './SearchBar';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -20,7 +21,6 @@ export const Header: React.FC = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const mobileSearchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setProfileOpen(false);
@@ -37,22 +37,6 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, [profileOpen]);
 
-  // Auto-focus the mobile search input when it opens
-  useEffect(() => {
-    if (mobileSearchOpen) {
-      setTimeout(() => mobileSearchRef.current?.focus(), 50);
-    }
-  }, [mobileSearchOpen]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const q = searchQuery.trim();
-    navigate(q ? `/products?search=${encodeURIComponent(q)}` : '/products');
-    setSearchQuery('');
-    setMobileSearchOpen(false);
-  };
-
-  const searchInputCls = `w-full ${isDark ? 'bg-zinc-800 border-white/5 text-white focus:bg-zinc-700' : 'bg-slate-50 border-slate-200 text-slate-900 focus:bg-white'} border rounded-lg pl-10 pr-4 py-2.5 text-sm transition-all outline-none focus:ring-2 focus:ring-yellow-400`;
 
   return (
     <>
@@ -68,19 +52,16 @@ export const Header: React.FC = () => {
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <form onSubmit={handleSearch} className="flex-1">
-                <div className="relative flex items-center">
-                  <Search className="absolute left-3 w-3.5 h-3.5 text-slate-500" />
-                  <input
-                    ref={mobileSearchRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search materials, tools..."
-                    className={searchInputCls}
-                  />
-                </div>
-              </form>
+              <div className="flex-1">
+                <SearchBar
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  autoFocus
+                  placeholder="Search materials, tools..."
+                  onSubmit={q => navigate(`/products?search=${encodeURIComponent(q)}`)}
+                  onNavigate={() => { setMobileSearchOpen(false); setSearchQuery(''); }}
+                />
+              </div>
             </div>
           )}
 
@@ -108,20 +89,15 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Center: Search (md+) */}
-            <form onSubmit={handleSearch} className="hidden md:block flex-1 max-w-2xl">
-              <div className="relative flex items-center group">
-                <div className="absolute left-4 text-slate-500 group-focus-within:text-yellow-400 transition-colors">
-                  <Search className="w-3.5 h-3.5" />
-                </div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search for materials, tools, and more..."
-                  className={searchInputCls}
-                />
-              </div>
-            </form>
+            <div className="hidden md:block flex-1 max-w-2xl">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search for materials, tools, and more..."
+                onSubmit={q => { navigate(`/products?search=${encodeURIComponent(q)}`); setSearchQuery(''); }}
+                onNavigate={() => setSearchQuery('')}
+              />
+            </div>
 
             {/* Right: Controls */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 text-sm font-bold shrink-0">
