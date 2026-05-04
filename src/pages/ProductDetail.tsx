@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { 
   Truck, ChevronRight, FileText, Zap, Check, Plus, Minus, AlertCircle,
   Heart, Share2, Star, ShieldCheck, MapPin, ArrowLeft, ArrowRight
@@ -79,8 +80,35 @@ export const ProductDetail: React.FC = () => {
   const cardClass = isDark ? 'bg-zinc-900 border-white/10' : 'bg-white border-slate-200';
   const inputClass = isDark ? 'bg-zinc-950 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900';
 
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image,
+    description: product.desc || `${product.name} available at BuildMore.`,
+    sku: `BM-${String(product.id).slice(-6).toUpperCase()}`,
+    brand: { '@type': 'Brand', name: 'BuildMore' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'INR',
+      price: product.price,
+      availability:
+        product.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+      url: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/product/${product.id}`,
+    },
+  };
+
   return (
     <div className="max-w-7xl mx-auto pb-20">
+      <SEO
+        title={product.name}
+        description={product.desc || `Buy ${product.name} online at BuildMore. Fast delivery, competitive prices.`}
+        canonical={`/product/${product.id}`}
+        image={product.image}
+        jsonLd={productJsonLd}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs font-medium text-slate-500 mb-8">
         <Link to="/" className="hover:text-yellow-400">Home</Link>

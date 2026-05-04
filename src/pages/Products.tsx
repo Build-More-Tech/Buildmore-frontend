@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Search, ChevronLeft, ChevronRight, X, Star, ChevronDown, Heart, Layers, Package, ArrowRight, Loader2, Filter, Grid3X3, List, Box, Info } from 'lucide-react';
 import { useSearchParams, Link, useParams } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { productApi, categoryApi, BackendProduct, Category } from '../api';
 import { normalizeProduct } from '../utils/normalizeProduct';
 import { getCategoryMeta } from '../utils/categoryMeta';
@@ -56,6 +57,7 @@ const ProductCard: React.FC<{ product: any; className?: string }> = ({ product, 
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            loading="lazy"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -231,8 +233,19 @@ export const Products: React.FC = () => {
     );
   }
 
+  const seoTitle = selectedCategory ? `${selectedCategory} – Building Materials` : 'All Products – Building Materials & Hardware';
+  const seoDesc = selectedCategory
+    ? `Shop ${selectedCategory} products on BuildMore. Browse our full catalog with competitive prices and fast delivery.`
+    : 'Browse BuildMore\'s full catalog of building materials, electrical, plumbing, hardware and construction supplies. Competitive prices, fast delivery.';
+
   return (
     <div className={`max-w-[1920px] mx-auto flex flex-col h-[calc(100vh-80px)] overflow-hidden border ${borderClass} ${bgClass} shadow-2xl relative`}>
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        canonical={selectedCategory ? `/products/${categorySlug || ''}` : '/products'}
+        noIndex={!!debouncedSearch}
+      />
       {/* ── Control Bar ── */}
       <div className={`px-3 sm:px-6 py-2 border-b ${borderClass} ${isDark ? 'bg-[#050505]' : 'bg-white'} flex items-center justify-between gap-2 z-30`}>
         {/* Left: Breadcrumbs — hidden on mobile */}

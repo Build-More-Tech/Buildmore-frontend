@@ -139,6 +139,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
           src={product.image}
           alt={product.name}
           className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
           referrerPolicy="no-referrer"
         />
         

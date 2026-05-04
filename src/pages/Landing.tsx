@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronRight, Loader2, Plus, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { Hero } from '../components/Hero';
 import { CategoryGrid } from '../components/CategoryGrid';
 import { TrustSignals } from '../components/TrustSignals';
@@ -41,6 +42,7 @@ const HomeProductCard: React.FC<{ product: ReturnType<typeof normalizeProduct> }
             src={product.image}
             alt={product.name}
             className="h-full w-full object-cover"
+            loading="lazy"
             referrerPolicy="no-referrer"
             onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />
@@ -196,8 +198,35 @@ export const Landing: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'BuildMore',
+      url: import.meta.env.VITE_APP_URL || 'https://buildmore.in',
+      logo: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/images/buildmore-logo.jpeg`,
+      description: 'BuildMore is your one-stop shop for building materials, electrical, plumbing, hardware and construction supplies.',
+      sameAs: ['https://www.instagram.com/buildmore.inframart'],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'BuildMore',
+      url: import.meta.env.VITE_APP_URL || 'https://buildmore.in',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/products?search={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+  ];
+
   return (
     <>
+      <SEO
+        canonical="/"
+        jsonLd={jsonLd}
+      />
       <Hero banners={banners} />
 
       <CategoryGrid />

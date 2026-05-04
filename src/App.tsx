@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './context/AuthContext';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import { CartProvider } from './context/CartContext';
@@ -50,6 +51,7 @@ function PageLoader() {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <ThemeProvider>
       <AuthProvider>
         <AdminAuthProvider>
@@ -101,5 +103,6 @@ export default function App() {
         </AdminAuthProvider>
       </AuthProvider>
     </ThemeProvider>
+    </HelmetProvider>
   );
 }

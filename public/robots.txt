@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Block admin and private user pages
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /wishlist
+Disallow: /logistics
+Disallow: /compliance
+Disallow: /rfqs
+
+Sitemap: https://www.buildmoreinframart.com/sitemap.xml
