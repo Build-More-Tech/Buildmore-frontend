@@ -5,6 +5,7 @@ import { AdminAuthProvider } from './context/AdminAuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
+import { CategoryProvider } from './context/CategoryContext';
 import { MainLayout } from './layouts/MainLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AdminProtectedRoute } from './components/AdminProtectedRoute';
@@ -54,6 +55,7 @@ export default function App() {
         <AdminAuthProvider>
           <CartProvider>
             <ToastProvider>
+              <CategoryProvider>
               <Router>
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
@@ -93,6 +95,7 @@ export default function App() {
                   </Routes>
                 </Suspense>
               </Router>
+              </CategoryProvider>
             </ToastProvider>
           </CartProvider>
         </AdminAuthProvider>

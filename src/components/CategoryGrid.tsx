@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getCategoryMeta } from '../utils/categoryMeta';
-import { categoryApi, Category } from '../api';
+import { useCategories } from '../context/CategoryContext';
 import { useTheme } from '../context/ThemeContext';
 
 // Fallback gradient per category (used when no image)
@@ -33,19 +33,11 @@ const CARD_GAP = 10; // px — gap between cards
 
 export const CategoryGrid: React.FC = () => {
   const { isDark } = useTheme();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { categories, loading } = useCategories();
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    categoryApi.getAll()
-      .then(res => setCategories(res.categories || []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
 
   const updateArrows = useCallback(() => {
     const el = scrollRef.current;

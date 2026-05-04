@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { Hero } from '../components/Hero';
 import { CategoryGrid } from '../components/CategoryGrid';
 import { TrustSignals } from '../components/TrustSignals';
-import { productApi, BackendProduct, categoryApi, Category, marketingApi, Banner, Offer } from '../api';
+import { productApi, BackendProduct, marketingApi, Banner, Offer } from '../api';
+import { useCategories } from '../context/CategoryContext';
 import { normalizeProduct } from '../utils/normalizeProduct';
 import { TOP_CATEGORIES } from '../utils/categoryMeta';
 import { formatPrice } from '../utils/currency';
@@ -47,7 +48,7 @@ const HomeProductCard: React.FC<{ product: ReturnType<typeof normalizeProduct> }
 
         {/* Info */}
         <div className="p-2.5">
-          <p className={`text-xs font-semibold leading-snug line-clamp-2 mb-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>
+          <p className={`text-xs font-semibold leading-snug line-clamp-2 mb-1 h-[2.0625rem] ${isDark ? 'text-white' : 'text-slate-800'}`}>
             {product.name}
           </p>
           <p className={`text-[10px] mb-2.5 truncate ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
@@ -73,6 +74,55 @@ const HomeProductCard: React.FC<{ product: ReturnType<typeof normalizeProduct> }
         </div>
       </div>
     </Link>
+  );
+};
+
+// ── Split row: two categories side by side 50/50 ─────────────────────────────
+const HomeCategoryRowSplit: React.FC<{
+  left: { title: string; slug: string; products: BackendProduct[] };
+  right: { title: string; slug: string; products: BackendProduct[] };
+}> = ({ left, right }) => {
+  const { isDark } = useTheme();
+
+  const Half: React.FC<{ title: string; slug: string; products: BackendProduct[] }> = ({ title, slug, products }) => (
+    <div className="flex-1 min-w-0">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className={`text-base font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
+        <Link
+          to={`/products/${slug}`}
+          className="text-xs font-bold text-yellow-500 hover:text-yellow-400 flex items-center gap-0.5 transition-colors"
+        >
+          see all <ChevronRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+      <div
+        className="flex gap-2 overflow-x-auto pb-1"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {products.slice(0, 6).map(p => (
+          <HomeProductCard key={p._id} product={normalizeProduct(p)} />
+        ))}
+        <Link
+          to={`/products/${slug}`}
+          className={`shrink-0 w-[148px] rounded-xl border flex flex-col items-center justify-center gap-2 transition-all hover:border-yellow-400 ${isDark ? 'bg-zinc-900 border-white/10' : 'bg-slate-50 border-slate-200'}`}
+          style={{ minHeight: 210 }}
+        >
+          <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center">
+            <ChevronRight className="w-5 h-5 text-black" />
+          </div>
+          <span className={`text-[11px] font-bold text-center px-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>See all</span>
+        </Link>
+      </div>
+    </div>
+  );
+
+  if (left.products.length === 0 && right.products.length === 0) return null;
+
+  return (
+    <section className="py-2 flex gap-6">
+      {left.products.length > 0 && <Half {...left} />}
+      {right.products.length > 0 && <Half {...right} />}
+    </section>
   );
 };
 
@@ -125,8 +175,8 @@ const HomeCategoryRow: React.FC<{ title: string; slug: string; products: Backend
 
 export const Landing: React.FC = () => {
   const { isDark } = useTheme();
+  const { categories } = useCategories();
   const [allProducts, setAllProducts] = useState<BackendProduct[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const [banners, setBanners] = useState<Banner[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,13 +184,11 @@ export const Landing: React.FC = () => {
   useEffect(() => {
     Promise.all([
       productApi.getAll({ limit: 500 }).then(res => res.products || []),
-      categoryApi.getAll().then(res => res.categories || []),
       marketingApi.getBanners().then(res => res.banners || []),
       marketingApi.getOffers().then(res => res.offers || []),
     ])
-      .then(([prods, cats, bans, offs]) => {
+      .then(([prods, bans, offs]) => {
         setAllProducts(prods);
-        setCategories(cats);
         setBanners(bans);
         setOffers(offs);
       })
@@ -162,17 +210,33 @@ export const Landing: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-6 py-4">
-          {categories.map(cat => {
-            const catProducts = allProducts.filter(p => {
+          {categories.map((cat, idx) => {
+            const getProducts = (c: typeof cat) => allProducts.filter(p => {
               const pCat = typeof p.category === 'object' && p.category ? (p.category as any).name : p.category;
-              return pCat?.trim().toLowerCase() === cat.name.trim().toLowerCase();
+              return pCat?.trim().toLowerCase() === c.name.trim().toLowerCase();
             });
+
+            // 2nd row (index 1): render split with index 2, skip index 2
+            if (idx === 1 && categories[2]) {
+              const leftCat = cat;
+              const rightCat = categories[2];
+              return (
+                <HomeCategoryRowSplit
+                  key={cat._id}
+                  left={{ title: leftCat.name, slug: leftCat.slug || leftCat.name.toLowerCase().replace(/\s+/g, '-'), products: getProducts(leftCat) }}
+                  right={{ title: rightCat.name, slug: rightCat.slug || rightCat.name.toLowerCase().replace(/\s+/g, '-'), products: getProducts(rightCat) }}
+                />
+              );
+            }
+            // Skip index 2 (already rendered in split)
+            if (idx === 2) return null;
+
             return (
               <HomeCategoryRow
                 key={cat._id}
                 title={cat.name}
                 slug={cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-')}
-                products={catProducts}
+                products={getProducts(cat)}
               />
             );
           })}

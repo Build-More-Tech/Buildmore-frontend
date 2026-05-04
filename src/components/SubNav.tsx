@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowRight, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { getCategoryMeta } from '../utils/categoryMeta';
-import { categoryApi, Category } from '../api';
+import { Category } from '../api';
+import { useCategories } from '../context/CategoryContext';
 import { useTheme } from '../context/ThemeContext';
 
 export const SubNav: React.FC = () => {
@@ -10,19 +11,16 @@ export const SubNav: React.FC = () => {
   const maxW = isBoxed ? 'max-w-7xl' : 'max-w-[1920px]';
   const { pathname, search } = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { categories } = useCategories();
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [mobileCategoryId, setMobileCategoryId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    categoryApi.getAll().then(res => {
-      setCategories(res.categories || []);
-      if (res.categories && res.categories.length > 0) {
-        setActiveCategory(res.categories[0]);
-      }
-    }).catch(() => {});
-  }, []);
+    if (categories.length > 0 && !activeCategory) {
+      setActiveCategory(categories[0]);
+    }
+  }, [categories]);
 
   useEffect(() => {
     setIsMenuOpen(false);
