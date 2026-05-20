@@ -231,6 +231,7 @@ export interface Order {
   totalAmount: number;
   status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   shippingAddress?: Address;
+  paymentMethod?: 'ONLINE' | 'COD';
   notes?: string;
   cancelReason?: string;
   createdAt: string;
