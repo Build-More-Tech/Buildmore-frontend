@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -64,7 +66,7 @@ export const Hero: React.FC<{ banners: Banner[] }> = ({ banners }) => {
             </p>
             <div className="pt-0.5 sm:pt-1">
               <Link
-                to={slide.ctaTo}
+                href={slide.ctaTo}
                 className="inline-flex items-center gap-2 bg-yellow-400 text-black px-4 sm:px-6 py-1.5 sm:py-2.5 font-black text-[10px] sm:text-xs uppercase tracking-widest rounded-xl hover:bg-yellow-300 transition-all shadow-lg shadow-yellow-400/20 hover:shadow-yellow-400/40 active:scale-95"
               >
                 {slide.cta}

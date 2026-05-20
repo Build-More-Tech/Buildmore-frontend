@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { categoryApi, adminCategoryApi, Category } from '../api';

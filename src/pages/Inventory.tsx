@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Package, TrendingDown, TrendingUp, AlertTriangle, Search, ChevronUp, ChevronDown, Loader2 } from 'lucide-react';
 import { productApi, BackendProduct } from '../api';

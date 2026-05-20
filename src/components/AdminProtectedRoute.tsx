@@ -1,5 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+'use client'
+
+import React, { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 
 interface AdminProtectedRouteProps {
@@ -8,11 +10,16 @@ interface AdminProtectedRouteProps {
 
 export const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) => {
   const { isAdminAuthenticated } = useAdminAuth();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (!isAdminAuthenticated) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />;
-  }
+  useEffect(() => {
+    if (!isAdminAuthenticated) {
+      router.replace(`/admin/login?from=${encodeURIComponent(pathname)}`);
+    }
+  }, [isAdminAuthenticated, router, pathname]);
+
+  if (!isAdminAuthenticated) return null;
 
   return <>{children}</>;
 };

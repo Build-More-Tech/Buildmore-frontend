@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Truck, Package, CheckCircle, Clock, AlertCircle, MapPin, Search, ArrowRight, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';

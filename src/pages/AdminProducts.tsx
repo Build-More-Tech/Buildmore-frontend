@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { adminApi, BackendProduct } from '../api';
 import { useTheme } from '../context/ThemeContext';
@@ -405,7 +407,7 @@ const ITEMS_PER_PAGE = 10;
 
 export const AdminProducts: React.FC = () => {
   const { isDark } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { adminToken } = useAdminAuth();
   
   const [products, setProducts] = useState<BackendProduct[]>([]);
@@ -577,7 +579,7 @@ export const AdminProducts: React.FC = () => {
               </button>
             </div>
             <button
-              onClick={() => navigate('/admin/products/add')}
+              onClick={() => router.push('/admin/products/add')}
               className="flex items-center gap-2 bg-yellow-400 text-black px-5 py-3 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-yellow-300 transition-all"
             >
               <Plus className="w-4 h-4" /> Add Product

@@ -1,6 +1,8 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronRight, Loader2, Plus, Check } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { SEO } from '../components/SEO';
 import { Hero } from '../components/Hero';
 import { CategoryGrid } from '../components/CategoryGrid';
@@ -29,7 +31,7 @@ const HomeProductCard: React.FC<{ product: ReturnType<typeof normalizeProduct> }
   };
 
   return (
-    <Link to={`/product/${product.id}`} className="shrink-0 w-[148px] group">
+    <Link href={`/product/${product.id}`} className="shrink-0 w-[148px] group">
       <div className={`rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-md ${isDark ? 'bg-zinc-900 border-white/10' : 'bg-white border-slate-200'}`}>
         {/* Image */}
         <div className={`relative h-[130px] ${isDark ? 'bg-zinc-800' : 'bg-slate-50'}`}>
@@ -91,7 +93,7 @@ const HomeCategoryRowSplit: React.FC<{
       <div className="flex items-center justify-between mb-3">
         <h2 className={`text-base font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
         <Link
-          to={`/products/${slug}`}
+          href={`/products/${slug}`}
           className="text-xs font-bold text-yellow-500 hover:text-yellow-400 flex items-center gap-0.5 transition-colors"
         >
           see all <ChevronRight className="w-3.5 h-3.5" />
@@ -105,7 +107,7 @@ const HomeCategoryRowSplit: React.FC<{
           <HomeProductCard key={p._id} product={normalizeProduct(p)} />
         ))}
         <Link
-          to={`/products/${slug}`}
+          href={`/products/${slug}`}
           className={`shrink-0 w-[148px] rounded-xl border flex flex-col items-center justify-center gap-2 transition-all hover:border-yellow-400 ${isDark ? 'bg-zinc-900 border-white/10' : 'bg-slate-50 border-slate-200'}`}
           style={{ minHeight: 210 }}
         >
@@ -141,7 +143,7 @@ const HomeCategoryRow: React.FC<{ title: string; slug: string; products: Backend
       <div className="flex items-center justify-between mb-4">
         <h2 className={`text-xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
         <Link
-          to={`/products/${slug}`}
+          href={`/products/${slug}`}
           className="text-xs font-bold text-yellow-500 hover:text-yellow-400 flex items-center gap-0.5 transition-colors"
         >
           see all <ChevronRight className="w-3.5 h-3.5" />
@@ -160,7 +162,7 @@ const HomeCategoryRow: React.FC<{ title: string; slug: string; products: Backend
           ))}
           {/* "See all" end card */}
           <Link
-            to={`/products/${slug}`}
+            href={`/products/${slug}`}
             className={`shrink-0 w-[148px] rounded-xl border flex flex-col items-center justify-center gap-2 transition-all hover:border-yellow-400 ${isDark ? 'bg-zinc-900 border-white/10' : 'bg-slate-50 border-slate-200'}`}
             style={{ minHeight: 210 }}
           >
@@ -203,8 +205,8 @@ export const Landing: React.FC = () => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'BuildMore',
-      url: import.meta.env.VITE_APP_URL || 'https://buildmore.in',
-      logo: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/images/buildmore-logo.jpeg`,
+      url: process.env.NEXT_PUBLIC_APP_URL || 'https://buildmore.in',
+      logo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://buildmore.in'}/images/buildmore-logo.jpeg`,
       description: 'BuildMore is your one-stop shop for building materials, electrical, plumbing, hardware and construction supplies.',
       sameAs: ['https://www.instagram.com/buildmore.inframart'],
     },
@@ -212,10 +214,10 @@ export const Landing: React.FC = () => {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'BuildMore',
-      url: import.meta.env.VITE_APP_URL || 'https://buildmore.in',
+      url: process.env.NEXT_PUBLIC_APP_URL || 'https://buildmore.in',
       potentialAction: {
         '@type': 'SearchAction',
-        target: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/products?search={search_term_string}`,
+        target: `${process.env.NEXT_PUBLIC_APP_URL || 'https://buildmore.in'}/products?search={search_term_string}`,
         'query-input': 'required name=search_term_string',
       },
     },
@@ -391,7 +393,7 @@ const BumperSlider: React.FC<{ offers: Offer[] }> = ({ offers }) => {
               </p>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-2 sm:mt-0">
-                <Link to="/products" className="bg-white text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-black text-[10px] sm:text-[11px] transition-all shadow-lg hover:bg-yellow-400 hover:scale-105 active:scale-95">
+                <Link href="/products" className="bg-white text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-black text-[10px] sm:text-[11px] transition-all shadow-lg hover:bg-yellow-400 hover:scale-105 active:scale-95">
                   Claim Offer
                 </Link>
 

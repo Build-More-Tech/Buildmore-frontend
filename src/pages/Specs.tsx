@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Search, Download, FileText, ChevronRight, Zap, Loader2, AlertCircle } from 'lucide-react';
 import { specsApi, SpecSheet } from '../api';

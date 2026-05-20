@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { BarChart3, Mail, Phone, MapPin, Globe, Linkedin, Twitter, Github, Youtube, ArrowUpRight, Shield, Award, Zap, Instagram } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -61,20 +63,20 @@ export const Footer: React.FC<FooterProps> = ({ isHome }) => {
           <div className="space-y-4 md:space-y-6">
             <h5 className={`font-black text-xs uppercase tracking-widest ${isDark ? 'text-white' : 'text-slate-900'}`}>Market Sectors</h5>
             <ul className="space-y-3 md:space-y-4 text-xs font-bold capitalize">
-              <li><Link to="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Bulk Materials <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-              <li><Link to="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Industrial Tools <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-              <li><Link to="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Safety Gear <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-              <li><Link to="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Electrical Kits <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+              <li><Link href="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Bulk Materials <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+              <li><Link href="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Industrial Tools <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+              <li><Link href="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Safety Gear <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+              <li><Link href="/products" className="hover:text-yellow-400 transition-colors flex items-center group">Electrical Kits <ArrowUpRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
             </ul>
           </div>
 
           <div className="space-y-4 md:space-y-6">
             <h5 className={`font-black text-xs uppercase tracking-widest ${isDark ? 'text-white' : 'text-slate-900'}`}>Operations</h5>
             <ul className="space-y-3 md:space-y-4 text-xs font-bold capitalize">
-              <li><Link to="/logistics" className="hover:text-yellow-400 transition-colors">Global Freight</Link></li>
-              <li><Link to="/compliance" className="hover:text-yellow-400 transition-colors">ISO Compliance</Link></li>
-              <li><Link to="/rfqs" className="hover:text-yellow-400 transition-colors">Price Benchmarking</Link></li>
-              <li><Link to="/logistics" className="hover:text-yellow-400 transition-colors">LTL Logistics</Link></li>
+              <li><Link href="/logistics" className="hover:text-yellow-400 transition-colors">Global Freight</Link></li>
+              <li><Link href="/compliance" className="hover:text-yellow-400 transition-colors">ISO Compliance</Link></li>
+              <li><Link href="/rfqs" className="hover:text-yellow-400 transition-colors">Price Benchmarking</Link></li>
+              <li><Link href="/logistics" className="hover:text-yellow-400 transition-colors">LTL Logistics</Link></li>
             </ul>
           </div>
 

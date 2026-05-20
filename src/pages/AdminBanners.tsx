@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { adminBannerApi, AdminBanner } from '../api';

@@ -1,8 +1,10 @@
+'use client'
+
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'BuildMore';
-const SITE_URL = (import.meta.env.VITE_APP_URL as string) || 'https://www.buildmoreinframart.com';
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.buildmoreinframart.com';
 const DEFAULT_DESC =
   'BuildMore is your one-stop shop for building materials, electrical, plumbing, hardware and construction supplies. Order online with fast delivery across India.';
 const DEFAULT_IMAGE = `${SITE_URL}/images/buildhero.jpg`;

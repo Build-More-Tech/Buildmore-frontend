@@ -1,3 +1,5 @@
+'use client'
+
 import React, { createContext, useContext, useState } from 'react';
 
 interface ThemeContextType {
@@ -12,11 +14,13 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return true;
     const stored = localStorage.getItem('buildmore_theme');
     return stored !== null ? stored === 'dark' : true;
   });
 
   const [isBoxed, setIsBoxed] = useState(() => {
+    if (typeof window === 'undefined') return false;
     return localStorage.getItem('buildmore_layout') === 'boxed';
   });
 

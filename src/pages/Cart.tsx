@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Truck, Package, CheckCircle, MapPin, X, CreditCard, Banknote, Save, FileText, ArrowLeft, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -17,7 +20,7 @@ export const Cart: React.FC = () => {
   const { isDark } = useTheme();
   const { items, removeItem, updateQuantity, totalValue, clearCart } = useCart();
   const { token, user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [fees, setFees] = useState<Fee[]>([]);
 
   useEffect(() => {
@@ -83,7 +86,7 @@ export const Cart: React.FC = () => {
       
       setSuccess(`Order ${res.order.orderNumber} placed successfully!`);
       clearCart();
-      setTimeout(() => navigate('/profile'), 2000);
+      setTimeout(() => router.push('/profile'), 2000);
     } catch (err: any) {
       setError(err.message || 'Failed to place order');
     } finally {
@@ -111,7 +114,7 @@ export const Cart: React.FC = () => {
         </div>
         <h1 className={`text-4xl font-black mb-4 tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Your cart is empty</h1>
         <p className="text-slate-500 mb-10 max-w-sm">Browse our catalog to get started.</p>
-        <Link to="/products" className="bg-yellow-400 text-black px-10 py-4 rounded-xl font-bold text-sm hover:bg-yellow-300 transition-all shadow-xl hover:scale-105 active:scale-95">
+        <Link href="/products" className="bg-yellow-400 text-black px-10 py-4 rounded-xl font-bold text-sm hover:bg-yellow-300 transition-all shadow-xl hover:scale-105 active:scale-95">
           Browse Products
         </Link>
       </div>
@@ -123,7 +126,7 @@ export const Cart: React.FC = () => {
       {/* Header */}
       <div className={`flex items-end justify-between border-b pb-6 ${isDark ? 'border-white/5' : 'border-slate-100'}`}>
         <div>
-          <Link to="/products" className={`text-xs font-medium ${isDark ? 'text-yellow-400' : 'text-yellow-600'} flex items-center gap-1 mb-2 hover:underline`}>
+          <Link href="/products" className={`text-xs font-medium ${isDark ? 'text-yellow-400' : 'text-yellow-600'} flex items-center gap-1 mb-2 hover:underline`}>
             <ArrowLeft className="w-3 h-3" /> Continue Shopping
           </Link>
           <h1 className={`text-3xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Shopping Cart</h1>
@@ -167,7 +170,7 @@ export const Cart: React.FC = () => {
             </div>
           ))}
 
-          <Link to="/products" className={`w-full py-3 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDark ? 'border-white/5 text-slate-500 hover:border-yellow-400/30 hover:text-yellow-400' : 'border-slate-100 text-slate-400 hover:border-yellow-400/40 hover:text-yellow-500'}`}>
+          <Link href="/products" className={`w-full py-3 rounded-xl border-2 border-dashed flex items-center justify-center gap-2 transition-all ${isDark ? 'border-white/5 text-slate-500 hover:border-yellow-400/30 hover:text-yellow-400' : 'border-slate-100 text-slate-400 hover:border-yellow-400/40 hover:text-yellow-500'}`}>
             <Plus className="w-4 h-4" />
             <span className="text-xs font-medium">Add more items</span>
           </Link>
@@ -225,7 +228,7 @@ export const Cart: React.FC = () => {
             {error && <p className="text-xs text-red-400 font-medium bg-red-400/10 px-3 py-2 rounded-lg">{error}</p>}
 
             <button
-              onClick={() => navigate('/checkout')}
+              onClick={() => router.push('/checkout')}
               className="w-full bg-yellow-400 text-black py-3.5 rounded-lg font-bold text-sm transition-all hover:bg-yellow-300 flex items-center justify-center gap-2"
             >
               <span>Proceed to Checkout</span> <ArrowRight className="w-4 h-4" />

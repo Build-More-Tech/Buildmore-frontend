@@ -1,5 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+'use client'
+
+import React, { useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 
 interface ProtectedRouteProps {
@@ -8,26 +10,34 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" state={{ from: location }} replace />;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace(`/auth?from=${encodeURIComponent(pathname)}`);
+    }
+  }, [isAuthenticated, router, pathname]);
+
+  if (!isAuthenticated) return null;
 
   return <>{children}</>;
 };
 
 export const AdminRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isAdmin } = useAuth();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" state={{ from: location }} replace />;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace(`/auth?from=${encodeURIComponent(pathname)}`);
+    } else if (!isAdmin) {
+      router.replace('/');
+    }
+  }, [isAuthenticated, isAdmin, router, pathname]);
 
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
+  if (!isAuthenticated || !isAdmin) return null;
 
   return <>{children}</>;
 };

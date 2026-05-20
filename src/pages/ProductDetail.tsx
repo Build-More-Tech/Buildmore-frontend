@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { SEO } from '../components/SEO';
 import { 
   Truck, ChevronRight, FileText, Zap, Check, Plus, Minus, AlertCircle,
@@ -13,8 +16,9 @@ import { useTheme } from '../context/ThemeContext';
 
 export const ProductDetail: React.FC = () => {
   const { isDark } = useTheme();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
   const [raw, setRaw] = useState<BackendProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -56,7 +60,7 @@ export const ProductDetail: React.FC = () => {
       <div className="flex flex-col items-center justify-center py-48 gap-4">
         <AlertCircle className="w-10 h-10 text-slate-500" />
         <p className="text-sm font-black uppercase tracking-widest text-slate-500">{error || 'Product not found'}</p>
-        <Link to="/products" className="text-yellow-400 text-[10px] font-black uppercase tracking-widest border border-yellow-400/20 px-8 py-3 rounded-full hover:bg-yellow-400/10 transition-colors">Back to Catalog</Link>
+        <Link href="/products" className="text-yellow-400 text-[10px] font-black uppercase tracking-widest border border-yellow-400/20 px-8 py-3 rounded-full hover:bg-yellow-400/10 transition-colors">Back to Catalog</Link>
       </div>
     );
   }
@@ -96,7 +100,7 @@ export const ProductDetail: React.FC = () => {
         product.stock > 0
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
-      url: `${import.meta.env.VITE_APP_URL || 'https://buildmore.in'}/product/${product.id}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://buildmore.in'}/product/${product.id}`,
     },
   };
 
@@ -111,9 +115,9 @@ export const ProductDetail: React.FC = () => {
       />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs font-medium text-slate-500 mb-8">
-        <Link to="/" className="hover:text-yellow-400">Home</Link>
+        <Link href="/" className="hover:text-yellow-400">Home</Link>
         <ChevronRight className="w-3 h-3" />
-        <Link to="/products" className="hover:text-yellow-400">Products</Link>
+        <Link href="/products" className="hover:text-yellow-400">Products</Link>
         <ChevronRight className="w-3 h-3" />
         <span className={isDark ? 'text-white' : 'text-slate-900'}>{product.name}</span>
       </nav>
@@ -291,7 +295,7 @@ export const ProductDetail: React.FC = () => {
                 {added ? <><Check className="w-5 h-5" /> Added to Cart</> : <>Add to Cart</>}
               </button>
               <button
-                onClick={() => navigate('/rfqs', { state: { productName: raw.productName, productId: raw._id } })}
+                onClick={() => router.push(`/rfqs?productName=${encodeURIComponent(raw.productName)}&productId=${raw._id}`)}
                 className={`px-5 rounded-xl border flex items-center justify-center transition-all ${isDark ? 'border-white/10 text-white hover:bg-white/10' : 'border-slate-200 text-slate-900 hover:bg-slate-50'}`}
               >
                 <FileText className="w-5 h-5" />

@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCcw, Home } from 'lucide-react';
 
@@ -30,7 +32,7 @@ class ErrorBoundaryClass extends React.Component<Props, State> {
     const { hasError, error } = this.state;
     // Read theme directly from localStorage so the error boundary works
     // even if the ThemeContext is what caused the error
-    const isDark = localStorage.getItem('buildmore_theme') !== 'light';
+    const isDark = typeof window !== 'undefined' && localStorage.getItem('buildmore_theme') !== 'light';
 
     if (hasError) {
       return (

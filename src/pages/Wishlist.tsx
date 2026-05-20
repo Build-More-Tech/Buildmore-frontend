@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Heart, ShoppingBag, Trash2, Loader2, Package } from 'lucide-react';
 import { productApi, BackendProduct } from '../api';
 import { normalizeProduct } from '../utils/normalizeProduct';
@@ -76,7 +78,7 @@ export const Wishlist: React.FC = () => {
             <p className={`text-xs font-bold ${mutedClass} mt-1`}>Save items you love by clicking the heart icon on any product.</p>
           </div>
           <Link
-            to="/products"
+            href="/products"
             className="bg-yellow-400 text-black px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-yellow-300 transition-all"
           >
             Browse Products
@@ -88,7 +90,7 @@ export const Wishlist: React.FC = () => {
             const norm = normalizeProduct(p);
             return (
               <div key={p._id} className={`group flex flex-col rounded-2xl border overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 ${cardBg}`}>
-                <Link to={`/product/${p._id}`} className="relative aspect-square overflow-hidden bg-slate-100 dark:bg-zinc-800">
+                <Link href={`/product/${p._id}`} className="relative aspect-square overflow-hidden bg-slate-100 dark:bg-zinc-800">
                   <img src={norm.image} alt={norm.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   <button
                     onClick={e => { e.preventDefault(); removeFromWishlist(p._id); }}
@@ -100,7 +102,7 @@ export const Wishlist: React.FC = () => {
                 </Link>
                 <div className="p-4 flex flex-col gap-2 flex-1">
                   <span className="text-[9px] font-bold text-yellow-500 uppercase tracking-widest">{norm.category}</span>
-                  <Link to={`/product/${p._id}`} className={`text-sm font-black line-clamp-2 group-hover:text-yellow-400 transition-colors leading-snug ${textClass}`}>
+                  <Link href={`/product/${p._id}`} className={`text-sm font-black line-clamp-2 group-hover:text-yellow-400 transition-colors leading-snug ${textClass}`}>
                     {norm.name}
                   </Link>
                   <div className="flex items-center justify-between mt-auto pt-3">

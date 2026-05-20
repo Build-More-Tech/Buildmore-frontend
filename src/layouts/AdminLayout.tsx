@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { useTheme } from '../context/ThemeContext';
 import {
@@ -20,15 +23,20 @@ const navItems = [
   { path: '/admin/settings', icon: Settings, label: 'Other Fees' },
 ];
 
-export const AdminLayout: React.FC = () => {
+interface AdminLayoutProps {
+  children: React.ReactNode;
+}
+
+export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const { adminUser, adminLogout, isAdminAuthenticated } = useAdminAuth();
   const { isDark } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     adminLogout();
-    navigate('/admin/login');
+    router.push('/admin/login');
   };
 
   const bgClass = isDark ? 'bg-black' : 'bg-slate-50';
@@ -39,7 +47,7 @@ export const AdminLayout: React.FC = () => {
   if (!isAdminAuthenticated) {
     return (
       <div className={`min-h-screen ${bgClass}`}>
-        <Outlet />
+        {children}
       </div>
     );
   }
@@ -74,7 +82,6 @@ export const AdminLayout: React.FC = () => {
               <p className={`text-[9px] font-black uppercase tracking-widest ${mutedClass}`}>Admin Portal</p>
             </div>
           </div>
-          {/* Close button — mobile only */}
           <button
             onClick={() => setSidebarOpen(false)}
             className={`lg:hidden p-1.5 rounded-lg transition-colors ${isDark ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-400 hover:bg-slate-100 hover:text-slate-900'}`}
@@ -85,23 +92,24 @@ export const AdminLayout: React.FC = () => {
 
         {/* Nav */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {navItems.map(item => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+          {navItems.map(item => {
+            const isActive = pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
                   isActive
                     ? 'bg-yellow-400 text-black'
                     : `${isDark ? 'text-slate-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'}`
-                }`
-              }
-            >
-              <item.icon className="w-4 h-4 shrink-0" />
-              {item.label}
-            </NavLink>
-          ))}
+                }`}
+              >
+                <item.icon className="w-4 h-4 shrink-0" />
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* User info + logout */}
@@ -156,7 +164,7 @@ export const AdminLayout: React.FC = () => {
         <main className="flex-1 overflow-auto">
           <div className="p-4 sm:p-6 lg:p-8">
             <ErrorBoundary>
-              <Outlet />
+              {children}
             </ErrorBoundary>
           </div>
         </main>

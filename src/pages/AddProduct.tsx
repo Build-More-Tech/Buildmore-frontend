@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { adminApi, categoryApi, Category } from '../api';
 import {
@@ -21,7 +23,7 @@ const MAX_DESC = 1000;
 
 export const AddProduct: React.FC = () => {
   const { isDark } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { adminToken } = useAdminAuth();
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -97,7 +99,7 @@ export const AddProduct: React.FC = () => {
       if (form.materialSpecifications.trim()) fd.append('materialSpecifications', form.materialSpecifications.trim());
       previews.forEach(p => fd.append('images', p.file));
       await adminApi.add(fd, adminToken);
-      navigate('/admin/products');
+      router.push('/admin/products');
     } catch (err: any) {
       setSubmitError(err.message || 'Failed to add product. Please try again.');
     } finally {
@@ -113,7 +115,7 @@ export const AddProduct: React.FC = () => {
       {/* Header */}
       <div className="flex items-center gap-4">
         <button
-          onClick={() => navigate('/admin/products')}
+          onClick={() => router.push('/admin/products')}
           className={`p-2 rounded-xl border transition-all ${isDark ? 'border-white/10 text-slate-400 hover:text-white hover:bg-white/5' : 'border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -384,7 +386,7 @@ export const AddProduct: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/admin/products')}
+            onClick={() => router.push('/admin/products')}
             className={`px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${isDark ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'}`}
           >
             Cancel

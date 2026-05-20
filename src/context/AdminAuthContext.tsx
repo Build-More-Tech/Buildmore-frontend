@@ -1,3 +1,5 @@
+'use client'
+
 import React, { createContext, useContext, useState } from 'react';
 import { authApi } from '../api';
 import { parseNameFromEmail, decodeTokenRole, isTokenExpired } from '../utils/authUtils';
@@ -20,6 +22,7 @@ const AdminAuthContext = createContext<AdminAuthContextType | null>(null);
 
 export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(() => {
+    if (typeof window === 'undefined') return null;
     try {
       const tok = localStorage.getItem('buildmore_admin_token');
       if (tok && isTokenExpired(tok)) return null;
@@ -31,6 +34,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   });
 
   const [adminToken, setAdminToken] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
     const stored = localStorage.getItem('buildmore_admin_token');
     if (stored && isTokenExpired(stored)) {
       localStorage.removeItem('buildmore_admin_token');

@@ -1,6 +1,9 @@
+'use client'
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Star, ChevronDown, Heart, Layers, Package, ArrowRight, Loader2, Filter, Grid3X3, List, Box, Info } from 'lucide-react';
-import { useSearchParams, Link, useParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams, useParams } from 'next/navigation';
 import { SEO } from '../components/SEO';
 import { SearchBar } from '../components/SearchBar';
 import { productApi, categoryApi, BackendProduct, Category } from '../api';
@@ -50,7 +53,7 @@ const ProductCard: React.FC<{ product: any; className?: string }> = ({ product, 
   };
 
   return (
-    <Link to={`/product/${product.id}`} className={`group relative flex flex-col ${className}`}>
+    <Link href={`/product/${product.id}`} className={`group relative flex flex-col ${className}`}>
       <div className={`relative rounded-xl overflow-hidden border transition-all duration-300 ${isDark ? 'bg-[#0a0a0a] border-white/10 hover:border-yellow-400/50' : 'bg-white border-slate-200 hover:border-yellow-400'}`}>
         {/* Compact Image Container */}
         <div className="relative aspect-square overflow-hidden bg-slate-50 dark:bg-zinc-950">
@@ -108,8 +111,9 @@ const ProductCard: React.FC<{ product: any; className?: string }> = ({ product, 
 // ─── Main Catalog Page ─────────────────────────────────────────────────────────
 export const Products: React.FC = () => {
   const { isDark } = useTheme();
-  const { categorySlug } = useParams<{ categorySlug: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
+  const categorySlug = params.categorySlug as string | undefined;
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<BackendProduct[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -251,7 +255,7 @@ export const Products: React.FC = () => {
       <div className={`px-3 sm:px-6 py-2 border-b ${borderClass} ${isDark ? 'bg-[#050505]' : 'bg-white'} flex items-center justify-between gap-2 z-30`}>
         {/* Left: Breadcrumbs — hidden on mobile */}
         <div className="hidden sm:flex items-center gap-2 text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 shrink-0">
-          <Link to="/" className="hover:text-yellow-400 transition-colors">InfraMart</Link>
+          <Link href="/" className="hover:text-yellow-400 transition-colors">InfraMart</Link>
           <ChevronRight className="w-2.5 h-2.5" />
           <span className="text-yellow-400">Products</span>
           {selectedCategory && (

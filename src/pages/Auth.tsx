@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BarChart3, Mail, Lock, ArrowRight, AlertCircle, User, Phone, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -9,9 +11,9 @@ type Mode = 'login' | 'signup' | 'forgot';
 export const Auth: React.FC = () => {
   const { isDark } = useTheme();
   const { login, signup, requestReset, resetPassword, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as any)?.from?.pathname || '/profile';
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from') || '/profile';
 
   const [mode, setMode] = useState<Mode>('login');
 
@@ -30,8 +32,8 @@ export const Auth: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) navigate(from, { replace: true });
-  }, [isAuthenticated, navigate, from]);
+    if (isAuthenticated) router.replace(from);
+  }, [isAuthenticated, router, from]);
 
   const resetState = () => {
     setError('');

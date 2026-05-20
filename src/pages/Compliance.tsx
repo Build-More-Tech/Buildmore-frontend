@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Download, CheckCircle, AlertCircle, Clock, Search, FileText, Plus, Trash2, Loader2, Upload, XCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';

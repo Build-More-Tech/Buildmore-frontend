@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { ShoppingBag, Heart, Star, ArrowRight } from 'lucide-react';
@@ -63,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
                 <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   {product.category} • SKU: BM-{String(product.id).slice(-6).toUpperCase()}
                 </span>
-                <Link to={`/product/${product.id}`}>
+                <Link href={`/product/${product.id}`}>
                   <h3 className={`font-bold text-lg leading-snug mt-1 transition-colors ${isDark ? 'text-white group-hover:text-yellow-400' : 'text-slate-900 group-hover:text-yellow-500'}`}>
                     {product.name}
                   </h3>
@@ -102,7 +104,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
             </div>
             <div className="flex items-center gap-3">
               <Link 
-                to={`/product/${product.id}`}
+                href={`/product/${product.id}`}
                 className={`px-4 py-2 rounded-xl border text-sm font-bold transition-colors ${isDark ? 'border-white/10 text-white hover:border-yellow-400' : 'border-slate-200 text-slate-900 hover:border-slate-400'}`}
               >
                 View Details
@@ -165,7 +167,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
 
         {/* Quick View Overlay */}
         <Link 
-          to={`/product/${product.id}`} 
+          href={`/product/${product.id}`} 
           className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40"
         >
           <span className="px-4 py-2 bg-white text-black text-xs font-bold rounded-lg shadow-lg">
@@ -194,7 +196,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
         )}
 
         {/* Product Name */}
-        <Link to={`/product/${product.id}`}>
+        <Link href={`/product/${product.id}`}>
           <h3 className={`font-bold text-sm leading-snug line-clamp-2 transition-colors ${isDark ? 'text-white group-hover:text-yellow-400' : 'text-slate-900 group-hover:text-yellow-500'}`}>
             {product.name}
           </h3>

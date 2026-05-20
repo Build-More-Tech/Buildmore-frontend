@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, ShieldCheck, CheckCircle, MapPin, CreditCard, Banknote, FileText, ArrowLeft, Loader2, Check, ChevronDown, ChevronUp, Home, Building2, Pencil, Trash2, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -17,7 +20,7 @@ export const Checkout: React.FC = () => {
   const { isDark } = useTheme();
   const { items, removeItem, updateQuantity, totalValue, clearCart } = useCart();
   const { token, user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [fees, setFees] = useState<Fee[]>([]);
 
   useEffect(() => {
@@ -65,9 +68,9 @@ export const Checkout: React.FC = () => {
 
   useEffect(() => {
     if (items.length === 0 && !success) {
-      navigate('/cart');
+      router.push('/cart');
     }
-  }, [items, navigate, success]);
+  }, [items, router, success]);
 
   const handlePlaceOrder = async () => {
     if (!addr.area || !addr.city || !addr.state || !addr.pincode || !addr.country) {
@@ -88,7 +91,7 @@ export const Checkout: React.FC = () => {
       
       setSuccess(`Order ${res.order.orderNumber} placed successfully!`);
       clearCart();
-      setTimeout(() => navigate('/profile'), 2500);
+      setTimeout(() => router.push('/profile'), 2500);
     } catch (err: any) {
       setError(err.message || 'Failed to place order');
     } finally {
@@ -179,7 +182,7 @@ export const Checkout: React.FC = () => {
       {/* Header */}
       <div className={`flex items-center justify-between border-b pb-6 mb-6 ${isDark ? 'border-white/5' : 'border-slate-100'}`}>
         <div>
-          <Link to="/cart" className={`text-xs font-medium ${isDark ? 'text-yellow-400' : 'text-yellow-600'} flex items-center gap-1 mb-2 hover:underline`}>
+          <Link href="/cart" className={`text-xs font-medium ${isDark ? 'text-yellow-400' : 'text-yellow-600'} flex items-center gap-1 mb-2 hover:underline`}>
             <ArrowLeft className="w-3 h-3" /> Back to Cart
           </Link>
           <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Checkout</h1>

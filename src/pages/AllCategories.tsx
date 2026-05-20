@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Layers, ChevronRight, Package, ArrowRight, Loader2, Search, Menu, X } from 'lucide-react';
 import { categoryApi, Category, productApi, BackendProduct } from '../api';
 import { getCategoryMeta } from '../utils/categoryMeta';
@@ -157,7 +159,7 @@ export const AllCategories: React.FC = () => {
                 </div>
                 <div className="min-w-0">
                   <nav className="hidden sm:flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">
-                    <Link to="/" className="hover:text-yellow-400">Home</Link>
+                    <Link href="/" className="hover:text-yellow-400">Home</Link>
                     <ChevronRight className="w-2.5 h-2.5" />
                     <span>Categories</span>
                     <ChevronRight className="w-2.5 h-2.5" />
@@ -169,7 +171,7 @@ export const AllCategories: React.FC = () => {
                 </div>
               </div>
               <Link
-                to={`/products/${activeCategory.slug}`}
+                href={`/products/${activeCategory.slug}`}
                 className="flex items-center gap-2 bg-yellow-400 text-black px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-yellow-300 transition-all shadow-lg shadow-yellow-400/20 shrink-0"
               >
                 <span className="hidden sm:inline">Explore All</span> <ArrowRight className="w-4 h-4" />
@@ -197,7 +199,7 @@ export const AllCategories: React.FC = () => {
                     const norm = normalizeProduct(p);
                     return (
                       <div key={p._id} className={`group flex flex-col rounded-2xl border ${borderClass} overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 ${isDark ? 'bg-zinc-900 hover:border-yellow-400/30' : 'bg-white hover:border-yellow-400'}`}>
-                        <Link to={`/product/${p._id}`} className="relative aspect-square overflow-hidden bg-slate-100">
+                        <Link href={`/product/${p._id}`} className="relative aspect-square overflow-hidden bg-slate-100">
                           <img src={norm.image} alt={norm.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                           <div className="absolute bottom-3 left-3 right-3 translate-y-4 group-hover:translate-y-0 transition-transform">
@@ -217,7 +219,7 @@ export const AllCategories: React.FC = () => {
                             <span className="text-[9px] font-bold text-yellow-500 uppercase tracking-widest">{norm.category}</span>
                             <span className={`text-[9px] font-black ${p.stock > 0 ? 'text-green-500' : 'text-red-500'} uppercase`}>{p.stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
                           </div>
-                          <Link to={`/product/${p._id}`} className={`text-sm font-black line-clamp-1 group-hover:text-yellow-400 transition-colors ${textClass}`}>{norm.name}</Link>
+                          <Link href={`/product/${p._id}`} className={`text-sm font-black line-clamp-1 group-hover:text-yellow-400 transition-colors ${textClass}`}>{norm.name}</Link>
                           <div className="flex items-center justify-between pt-2">
                             <span className={`text-lg font-black ${textClass}`}>{formatPrice(norm.price)}</span>
                             <div className="flex items-center gap-1 bg-yellow-400/10 px-2 py-0.5 rounded text-yellow-500">

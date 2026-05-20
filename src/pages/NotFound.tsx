@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -14,7 +16,7 @@ export const NotFound: React.FC = () => {
       <p className="text-sm text-slate-500 font-medium">The page you're looking for doesn't exist.</p>
     </div>
     <Link
-      to="/"
+      href="/"
       className="bg-yellow-400 text-black px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-yellow-300 transition-all"
     >
       Back to Home

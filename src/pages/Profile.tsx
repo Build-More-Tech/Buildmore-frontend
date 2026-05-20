@@ -1,8 +1,11 @@
+'use client'
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Package, MapPin, BarChart, Plus, Pencil, Trash2, Check, LogOut, Mail, Phone, Calendar, TrendingUp, Truck, Clock, RefreshCw, X, Loader2, FileText, Heart } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { userApi, orderApi, shipmentApi, UserProfile, Order, Address } from '../api';
-import { Link, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { formatPrice } from '../utils/currency';
 import { useTheme } from '../context/ThemeContext';
 
@@ -31,7 +34,7 @@ type Tab = 'overview' | 'orders' | 'addresses' | 'account';
 export const Profile: React.FC = () => {
   const { isDark } = useTheme();
   const { token, logout, updateUser } = useAuth();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -269,7 +272,7 @@ export const Profile: React.FC = () => {
               <div className="flex flex-col items-center py-10 gap-3">
                 <Package className="w-8 h-8 text-slate-400 opacity-40" />
                 <p className="text-xs text-slate-500">No orders yet</p>
-                <Link to="/products" className="text-[10px] font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300 transition-colors">Browse Products →</Link>
+                <Link href="/products" className="text-[10px] font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300 transition-colors">Browse Products →</Link>
               </div>
             ) : (
               <div className="divide-y divide-slate-100 dark:divide-white/5">
@@ -314,7 +317,7 @@ export const Profile: React.FC = () => {
               );
               const cls = `flex items-center gap-3 p-4 rounded-2xl border transition-all ${card} ${isDark ? 'hover:border-white/10' : 'hover:shadow-md'}`;
               return 'to' in link ? (
-                <Link key={link.label} to={link.to} className={cls}>{inner}</Link>
+                <Link key={link.label} href={link.to} className={cls}>{inner}</Link>
               ) : (
                 <button key={link.label} onClick={() => setActiveTab(link.tab)} className={`w-full text-left ${cls}`}>{inner}</button>
               );
@@ -335,7 +338,7 @@ export const Profile: React.FC = () => {
             <div className="flex flex-col items-center py-16 gap-3">
               <Package className="w-10 h-10 text-slate-400 opacity-30" />
               <p className="text-xs text-slate-500 uppercase tracking-widest">No orders yet</p>
-              <Link to="/products" className="text-[10px] font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300 transition-colors">Browse Products →</Link>
+              <Link href="/products" className="text-[10px] font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300 transition-colors">Browse Products →</Link>
             </div>
           ) : (
             <div className="divide-y divide-slate-100 dark:divide-white/5">

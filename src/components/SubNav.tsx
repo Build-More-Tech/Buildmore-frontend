@@ -1,6 +1,9 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ArrowRight, ChevronRight } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { getCategoryMeta } from '../utils/categoryMeta';
 import { Category } from '../api';
 import { useCategories } from '../context/CategoryContext';
@@ -9,7 +12,9 @@ import { useTheme } from '../context/ThemeContext';
 export const SubNav: React.FC = () => {
   const { isDark, isBoxed } = useTheme();
   const maxW = isBoxed ? 'max-w-7xl' : 'max-w-[1920px]';
-  const { pathname, search } = useLocation();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? '';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { categories } = useCategories();
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
@@ -64,7 +69,7 @@ export const SubNav: React.FC = () => {
                 return (
                   <Link
                     key={cat._id}
-                    to={`/products?category=${encodeURIComponent(cat.name)}`}
+                    href={`/products?category=${encodeURIComponent(cat.name)}`}
                     className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all ${
                       isDark ? 'hover:bg-white/5 hover:text-white' : 'hover:bg-slate-100 hover:text-slate-900'
                     }`}
@@ -79,7 +84,7 @@ export const SubNav: React.FC = () => {
             <div className={`w-px h-4 shrink-0 ${isDark ? 'bg-white/10' : 'bg-slate-200'}`} />
 
             <Link
-              to="/products"
+              href="/products"
               className={`text-xs font-semibold shrink-0 transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}
             >
               All Products
@@ -103,7 +108,7 @@ export const SubNav: React.FC = () => {
                   Categories
                 </span>
                 <Link
-                  to="/products/categories"
+                  href="/products/categories"
                   onClick={() => setIsMenuOpen(false)}
                   className="text-[10px] font-black uppercase tracking-widest text-yellow-400 hover:underline"
                 >
@@ -152,7 +157,7 @@ export const SubNav: React.FC = () => {
                             {cat.subcategories.map(sub => (
                               <Link
                                 key={sub._id}
-                                to={`/products?category=${encodeURIComponent(cat.name)}`}
+                                href={`/products?category=${encodeURIComponent(cat.name)}`}
                                 onClick={() => setIsMenuOpen(false)}
                                 className={`px-3 py-2.5 rounded-xl border text-xs font-semibold text-center transition-all ${
                                   isDark
@@ -168,7 +173,7 @@ export const SubNav: React.FC = () => {
                           <p className={`text-xs mb-3 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>No subcategories</p>
                         )}
                         <Link
-                          to={`/products/${cat.slug}`}
+                          href={`/products/${cat.slug}`}
                           onClick={() => setIsMenuOpen(false)}
                           className="flex items-center justify-center gap-2 w-full py-2 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-black uppercase tracking-widest transition-colors"
                         >
@@ -191,7 +196,7 @@ export const SubNav: React.FC = () => {
                     Categories
                   </div>
                   <Link
-                    to="/products/categories"
+                    href="/products/categories"
                     onClick={() => setIsMenuOpen(false)}
                     className="text-[9px] font-black uppercase tracking-widest text-yellow-400 hover:underline"
                   >
@@ -247,7 +252,7 @@ export const SubNav: React.FC = () => {
                         </div>
                       </div>
                       <Link
-                        to={`/products/${activeCategory.slug}`}
+                        href={`/products/${activeCategory.slug}`}
                         onClick={() => setIsMenuOpen(false)}
                         className="flex items-center gap-1.5 bg-yellow-400 text-black px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-yellow-300 transition-all shadow-lg shadow-yellow-400/20 shrink-0 ml-3"
                       >
@@ -259,7 +264,7 @@ export const SubNav: React.FC = () => {
                       {activeCategory.subcategories?.map(sub => (
                         <Link
                           key={sub._id}
-                          to={`/products?category=${encodeURIComponent(activeCategory.name)}`}
+                          href={`/products?category=${encodeURIComponent(activeCategory.name)}`}
                           onClick={() => setIsMenuOpen(false)}
                           className={`px-4 py-3 rounded-xl border text-xs font-semibold text-center transition-all ${
                             isDark
@@ -295,7 +300,7 @@ export const SubNav: React.FC = () => {
                   <p className="text-[9px] text-slate-500 font-medium mt-1 leading-relaxed">From structural to finishing.</p>
                 </div>
                 <Link
-                  to="/products"
+                  href="/products"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-yellow-400 hover:bg-yellow-300 transition-colors group"
                 >

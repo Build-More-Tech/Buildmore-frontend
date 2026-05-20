@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { adminApi, BackendProduct, orderApi, Order, rfqApi, RFQ, shipmentApi, Shipment, specsApi, SpecSheet } from '../api';
 import { Plus, Package, ShoppingCart, FileText, Truck, Loader2, ChevronRight, LayoutDashboard } from 'lucide-react';
@@ -31,7 +33,7 @@ export const AdminDashboard: React.FC = () => {
     }).finally(() => setLoading(false));
   }, [adminToken]);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const cardBg = isDark ? 'bg-zinc-900 border-white/5' : 'bg-white border-slate-200';
   const textClass = isDark ? 'text-white' : 'text-slate-900';
   const mutedClass = isDark ? 'text-slate-400' : 'text-slate-500';
@@ -58,7 +60,7 @@ export const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map(stat => (
-          <button key={stat.label} onClick={() => navigate(stat.path)} className={`p-6 rounded-2xl border text-left transition-all hover:border-yellow-400/50 hover:scale-[1.02] ${cardBg}`}>
+          <button key={stat.label} onClick={() => router.push(stat.path)} className={`p-6 rounded-2xl border text-left transition-all hover:border-yellow-400/50 hover:scale-[1.02] ${cardBg}`}>
             <div className="flex items-center justify-between mb-4">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDark ? 'bg-white/5' : 'bg-slate-100'}`}>
                 <stat.icon className="w-5 h-5 text-yellow-400" />
@@ -75,7 +77,7 @@ export const AdminDashboard: React.FC = () => {
         <div className={`rounded-2xl border p-6 ${cardBg}`}>
           <div className="flex items-center justify-between mb-6">
             <h2 className={`text-sm font-black uppercase tracking-widest ${textClass}`}>Recent Orders</h2>
-            <button onClick={() => navigate('/admin/orders')} className="text-xs font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300">View All</button>
+            <button onClick={() => router.push('/admin/orders')} className="text-xs font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300">View All</button>
           </div>
           {recentOrders.length === 0 ? (
             <p className={`text-sm font-bold ${mutedClass}`}>No orders yet</p>
@@ -100,7 +102,7 @@ export const AdminDashboard: React.FC = () => {
         <div className={`rounded-2xl border p-6 ${cardBg}`}>
           <div className="flex items-center justify-between mb-6">
             <h2 className={`text-sm font-black uppercase tracking-widest ${textClass}`}>Recent RFQs</h2>
-            <button onClick={() => navigate('/admin/rfqs')} className="text-xs font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300">View All</button>
+            <button onClick={() => router.push('/admin/rfqs')} className="text-xs font-black uppercase tracking-widest text-yellow-400 hover:text-yellow-300">View All</button>
           </div>
           {recentRfqs.length === 0 ? (
             <p className={`text-sm font-bold ${mutedClass}`}>No RFQs yet</p>

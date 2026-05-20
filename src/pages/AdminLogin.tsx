@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { 
   Lock, Loader2, AlertCircle, Shield, BarChart3, Eye, EyeOff, 
@@ -15,7 +18,7 @@ export const AdminLogin: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { adminLogin } = useAdminAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ export const AdminLogin: React.FC = () => {
     const result = await adminLogin(email, password);
     
     if (result.success) {
-      navigate('/admin/dashboard');
+      router.push('/admin/dashboard');
     } else {
       setError(result.error || 'Login failed');
     }
@@ -184,7 +187,7 @@ export const AdminLogin: React.FC = () => {
 
           <div className="mt-8 pt-6 border-t border-dashed text-center">
             <Link 
-              to="/" 
+              href="/" 
               className={`text-xs font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-2 ${
                 isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
               }`}

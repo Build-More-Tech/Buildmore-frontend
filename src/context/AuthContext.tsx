@@ -1,3 +1,5 @@
+'use client'
+
 import React, { createContext, useContext, useState } from 'react';
 import { authApi, userApi } from '../api';
 import { parseNameFromEmail, decodeTokenRole, isTokenExpired } from '../utils/authUtils';
@@ -25,6 +27,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === 'undefined') return null;
     try {
       const tok = localStorage.getItem('buildmore_token');
       if (tok && isTokenExpired(tok)) return null;
@@ -36,6 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [token, setToken] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
     const stored = localStorage.getItem('buildmore_token');
     if (stored && isTokenExpired(stored)) {
       localStorage.removeItem('buildmore_token');

@@ -1,8 +1,10 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Plus, Clock, CheckCircle, XCircle, FileText, Search, ChevronDown, ChevronUp, Send, Loader2, AlertCircle, Package, Pencil, Check, TrendingUp, Zap, Tag, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { rfqApi, RFQ } from '../api';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
 import { formatPrice } from '../utils/currency';
 
@@ -26,7 +28,7 @@ const STATUS_OPTIONS = ['All', 'DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'QUOTED', '
 export const RFQs: React.FC = () => {
   const { isDark } = useTheme();
   const { token, user } = useAuth();
-  const location = useLocation();
+  const searchParams = useSearchParams();
 
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,10 +76,10 @@ export const RFQs: React.FC = () => {
 
   // Pre-populate from ProductDetail navigation state
   useEffect(() => {
-    const state = location.state as { productName?: string; productId?: string } | null;
-    if (state?.productName) {
+    const productName = searchParams.get('productName');
+    if (productName) {
       setShowNewForm(true);
-      setAddItemForm(prev => ({ ...prev, productName: state.productName! }));
+      setAddItemForm(prev => ({ ...prev, productName: productName! }));
     }
   }, []);
 
