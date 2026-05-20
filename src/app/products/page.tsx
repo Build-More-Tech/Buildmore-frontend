@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { Products } from '@/src/views/Products'
 
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <MainLayout noPadding><Products /></MainLayout>
+  return <MainLayout noPadding><Suspense fallback={null}><Products /></Suspense></MainLayout>
 }

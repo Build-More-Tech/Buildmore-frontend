@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
 import { RFQs } from '@/src/views/RFQs'
@@ -9,5 +10,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <MainLayout><ProtectedRoute><RFQs /></ProtectedRoute></MainLayout>
+  return <MainLayout><ProtectedRoute><Suspense fallback={null}><RFQs /></Suspense></ProtectedRoute></MainLayout>
 }
