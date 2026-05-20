@@ -10,7 +10,6 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { formatPrice } from '../utils/currency';
 import { LocationModal, getStoredLocation } from './LocationModal';
-import { BuildMoreLogo } from './BuildMoreLogo';
 
 export const Header: React.FC = () => {
   const { totalItems, totalValue } = useCart();
@@ -20,7 +19,11 @@ export const Header: React.FC = () => {
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
   const [locationOpen, setLocationOpen] = useState(false);
-  const [location, setLocation] = useState(() => getStoredLocation());
+  const [location, setLocation] = useState('');
+
+  useEffect(() => {
+    setLocation(getStoredLocation());
+  }, []);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -73,8 +76,9 @@ export const Header: React.FC = () => {
 
             {/* Left: Logo + Location */}
             <div className="flex items-center gap-4 lg:gap-8 shrink-0">
-              <Link href="/" className="flex items-center">
-                <BuildMoreLogo height={48} isDark={isDark} />
+              <Link href="/" className="flex items-center gap-0.5">
+                <span className={`text-xl font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Build</span>
+                <span className="text-xl font-black uppercase tracking-tighter text-yellow-400">More</span>
               </Link>
 
               <button

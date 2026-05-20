@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authApi } from '../api';
 import { parseNameFromEmail, decodeTokenRole, isTokenExpired } from '../utils/authUtils';
 
@@ -21,28 +21,22 @@ interface AdminAuthContextType {
 const AdminAuthContext = createContext<AdminAuthContextType | null>(null);
 
 export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [adminUser, setAdminUser] = useState<AdminUser | null>(() => {
-    if (typeof window === 'undefined') return null;
+  const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [adminToken, setAdminToken] = useState<string | null>(null);
+
+  useEffect(() => {
     try {
       const tok = localStorage.getItem('buildmore_admin_token');
-      if (tok && isTokenExpired(tok)) return null;
+      if (!tok || isTokenExpired(tok)) {
+        localStorage.removeItem('buildmore_admin_token');
+        localStorage.removeItem('buildmore_admin_user');
+        return;
+      }
       const stored = localStorage.getItem('buildmore_admin_user');
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const [adminToken, setAdminToken] = useState<string | null>(() => {
-    if (typeof window === 'undefined') return null;
-    const stored = localStorage.getItem('buildmore_admin_token');
-    if (stored && isTokenExpired(stored)) {
-      localStorage.removeItem('buildmore_admin_token');
-      localStorage.removeItem('buildmore_admin_user');
-      return null;
-    }
-    return stored;
-  });
+      if (stored) setAdminUser(JSON.parse(stored));
+      setAdminToken(tok);
+    } catch { /* ignore */ }
+  }, []);
 
   const persistAdminAuth = (user: AdminUser, token: string) => {
     setAdminUser(user);

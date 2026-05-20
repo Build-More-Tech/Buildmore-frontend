@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface ThemeContextType {
   isDark: boolean;
@@ -13,16 +13,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const stored = localStorage.getItem('buildmore_theme');
-    return stored !== null ? stored === 'dark' : true;
-  });
+  const [isDark, setIsDark] = useState(true);
+  const [isBoxed, setIsBoxed] = useState(true);
 
-  const [isBoxed, setIsBoxed] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('buildmore_layout') === 'boxed';
-  });
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('buildmore_theme');
+    if (storedTheme !== null) setIsDark(storedTheme === 'dark');
+    const storedLayout = localStorage.getItem('buildmore_layout');
+    if (storedLayout !== null) setIsBoxed(storedLayout !== 'full');
+  }, []);
 
   const handleSetIsDark = (d: boolean) => {
     setIsDark(d);
