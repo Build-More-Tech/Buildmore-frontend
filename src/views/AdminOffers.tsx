@@ -221,7 +221,7 @@ export const AdminOffers: React.FC = () => {
     setForm: React.Dispatch<React.SetStateAction<typeof EMPTY_FORM>>;
     image: File | null;
     setImage: (f: File | null) => void;
-    fileRef: React.RefObject<HTMLInputElement>;
+    fileRef: React.RefObject<HTMLInputElement | null>;
     error: string;
     saving: boolean;
     existingImage?: string;
