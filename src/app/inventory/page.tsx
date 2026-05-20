@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { Inventory } from '@/src/pages/Inventory'
+import { Inventory } from '@/src/views/Inventory'
 
 export const metadata: Metadata = {
   title: 'Inventory & Stock Availability',

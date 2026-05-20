@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
-import { Profile } from '@/src/pages/Profile'
+import { Profile } from '@/src/views/Profile'
 
 export const metadata: Metadata = {
   title: 'My Account',

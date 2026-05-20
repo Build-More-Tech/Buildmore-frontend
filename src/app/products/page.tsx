@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { Products } from '@/src/pages/Products'
+import { Products } from '@/src/views/Products'
 
 export const metadata: Metadata = {
   title: 'All Building Materials & Hardware',

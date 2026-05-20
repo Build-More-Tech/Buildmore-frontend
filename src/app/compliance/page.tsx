@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
-import { Compliance } from '@/src/pages/Compliance'
+import { Compliance } from '@/src/views/Compliance'
 
 export const metadata: Metadata = {
   title: 'Compliance Documents',

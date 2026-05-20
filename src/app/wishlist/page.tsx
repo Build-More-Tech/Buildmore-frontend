@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
-import { Wishlist } from '@/src/pages/Wishlist'
+import { Wishlist } from '@/src/views/Wishlist'
 
 export const metadata: Metadata = {
   title: 'My Wishlist',

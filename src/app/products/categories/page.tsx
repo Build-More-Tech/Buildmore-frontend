@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { AllCategories } from '@/src/pages/AllCategories'
+import { AllCategories } from '@/src/views/AllCategories'
 
 export const metadata: Metadata = {
   title: 'Browse All Building Material Categories',

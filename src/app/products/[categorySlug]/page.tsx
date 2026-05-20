@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { Products } from '@/src/pages/Products'
+import { Products } from '@/src/views/Products'
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.buildmoreinframart.com'
 

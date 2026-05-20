@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { Auth } from '@/src/pages/Auth'
+import { Auth } from '@/src/views/Auth'
 
 export const metadata: Metadata = {
   title: 'Sign In or Register',

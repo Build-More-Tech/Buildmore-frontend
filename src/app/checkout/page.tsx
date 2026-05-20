@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
-import { Checkout } from '@/src/pages/Checkout'
+import { Checkout } from '@/src/views/Checkout'
 
 export const metadata: Metadata = {
   title: 'Checkout',

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { ProtectedRoute } from '@/src/components/ProtectedRoute'
-import { Cart } from '@/src/pages/Cart'
+import { Cart } from '@/src/views/Cart'
 
 export const metadata: Metadata = {
   title: 'Your Cart',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { MainLayout } from '@/src/layouts/MainLayout'
-import { ProductDetail } from '@/src/pages/ProductDetail'
+import { ProductDetail } from '@/src/views/ProductDetail'
 
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.buildmoreinframart.com'
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://buildmore-inframart-backend.onrender.com'
