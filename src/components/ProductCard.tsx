@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
@@ -16,12 +16,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode = 'g
   const { addItem } = useCart();
   const { isDark } = useTheme();
   const [added, setAdded] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(() => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  useEffect(() => {
     try {
       const saved: string[] = JSON.parse(localStorage.getItem('buildmore_wishlist') || '[]');
-      return saved.includes(String(product.id));
-    } catch { return false; }
-  });
+      setIsWishlisted(saved.includes(String(product.id)));
+    } catch {}
+  }, [product.id]);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();

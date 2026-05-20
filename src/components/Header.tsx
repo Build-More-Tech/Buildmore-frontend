@@ -12,6 +12,7 @@ import { formatPrice } from '../utils/currency';
 import { LocationModal, getStoredLocation } from './LocationModal';
 
 export const Header: React.FC = () => {
+  const LOGISTICS_FFEE = 450;
   const { totalItems, totalValue } = useCart();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { isDark, toggleDark, isBoxed, toggleBoxed } = useTheme();
@@ -252,7 +253,7 @@ export const Header: React.FC = () => {
                 </div>
                 <div className="hidden sm:flex flex-col">
                   <span className="text-[10px] text-slate-500 font-bold">Cart Total</span>
-                  <span className="text-xs font-bold text-yellow-400">{formatPrice(totalValue)}</span>
+                  <span className="text-xs font-bold text-yellow-400">{formatPrice(totalValue + (totalItems > 0 ? LOGISTICS_FFEE : 0))}</span>
                 </div>
               </Link>
 

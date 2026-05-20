@@ -27,12 +27,14 @@ export const ProductDetail: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'shipping'>('description');
   const [specSheets, setSpecSheets] = useState<SpecSheet[]>([]);
-  const [isWishlisted, setIsWishlisted] = useState(() => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  useEffect(() => {
     try {
       const saved: string[] = JSON.parse(localStorage.getItem('buildmore_wishlist') || '[]');
-      return saved.includes(id || '');
-    } catch { return false; }
-  });
+      setIsWishlisted(saved.includes(id || ''));
+    } catch {}
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;

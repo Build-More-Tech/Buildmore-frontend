@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { MainLayout } from '@/src/layouts/MainLayout'
 import { Products } from '@/src/views/Products'
 
@@ -40,7 +41,7 @@ export default async function Page(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <MainLayout noPadding><Products /></MainLayout>
+      <MainLayout noPadding><Suspense fallback={null}><Products /></Suspense></MainLayout>
     </>
   )
 }

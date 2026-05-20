@@ -25,12 +25,14 @@ const ProductCard: React.FC<{ product: any; className?: string }> = ({ product, 
   const { addItem } = useCart();
   const { isDark } = useTheme();
   const [added, setAdded] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(() => {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  useEffect(() => {
     try {
       const saved: string[] = JSON.parse(localStorage.getItem('buildmore_wishlist') || '[]');
-      return saved.includes(String(product.id));
-    } catch { return false; }
-  });
+      setIsWishlisted(saved.includes(String(product.id)));
+    } catch {}
+  }, [product.id]);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault(); e.stopPropagation();
