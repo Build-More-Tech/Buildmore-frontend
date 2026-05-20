@@ -317,10 +317,10 @@ export const AdminOrders: React.FC = () => {
                         <span className={mutedClass}>Subtotal</span>
                         <span className={textClass}>₹{order.subtotal?.toFixed(2) || order.totalAmount.toFixed(2)}</span>
                       </div>
-                      {order.shippingCost > 0 && (
+                      {(order.shippingCost ?? 0) > 0 && (
                         <div className="flex justify-between text-xs">
                           <span className={mutedClass}>Shipping</span>
-                          <span className={textClass}>₹{order.shippingCost.toFixed(2)}</span>
+                          <span className={textClass}>₹{order.shippingCost!.toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex justify-between text-sm font-black pt-1 border-t border-current">

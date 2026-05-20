@@ -176,7 +176,7 @@ export const ProductDetail: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <div className="flex">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className={`w-3.5 h-3.5 ${star <= Math.round(product.rating) ? 'text-yellow-400 fill-current' : 'text-slate-300'}`} />
+                      <Star key={star} className={`w-3.5 h-3.5 ${star <= Math.round(product.rating ?? 0) ? 'text-yellow-400 fill-current' : 'text-slate-300'}`} />
                     ))}
                   </div>
                   <span className="text-xs text-slate-500">({product.reviews || 0} reviews)</span>

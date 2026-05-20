@@ -57,7 +57,7 @@ export const Checkout: React.FC = () => {
         setSavedAddresses(addresses);
         if (addresses.length > 0) {
           const first = addresses[0];
-          setSelectedAddressId(first._id);
+          setSelectedAddressId(first._id ?? null);
           setAddr({ building: first.building || '', area: first.area, landmark: first.landmark || '', city: first.city, state: first.state, pincode: first.pincode, country: first.country, alternatephone: first.alternatephone || '' });
         } else {
           setShowNewForm(true);
@@ -100,7 +100,7 @@ export const Checkout: React.FC = () => {
   };
 
   const startEdit = (a: Address) => {
-    setEditingAddressId(a._id);
+    setEditingAddressId(a._id ?? null);
     setEditForm({ building: a.building || '', area: a.area, landmark: a.landmark || '', city: a.city, state: a.state, pincode: a.pincode, country: a.country, alternatephone: a.alternatephone || '' });
   };
 
@@ -110,12 +110,12 @@ export const Checkout: React.FC = () => {
     if (!token || !addr.area || !addr.city || !addr.state || !addr.pincode) return;
     setSavingNewAddr(true);
     try {
-      const res = await userApi.addAddress({ ...addr, _id: '' }, token);
-      const updated: Address[] = res.address ?? res.user?.address ?? [];
+      const res = await userApi.addAddress({ ...addr }, token);
+      const updated: Address[] = res.address ?? [];
       setSavedAddresses(updated);
       const newest = updated[updated.length - 1];
       if (newest) {
-        setSelectedAddressId(newest._id);
+        setSelectedAddressId(newest._id ?? null);
       }
       setShowNewForm(false);
       setAddr({ ...EMPTY_ADDR });
@@ -153,7 +153,7 @@ export const Checkout: React.FC = () => {
       if (selectedAddressId === id) {
         if (updated.length > 0) {
           const first = updated[0];
-          setSelectedAddressId(first._id);
+          setSelectedAddressId(first._id ?? null);
           setAddr({ building: first.building || '', area: first.area, landmark: first.landmark || '', city: first.city, state: first.state, pincode: first.pincode, country: first.country, alternatephone: first.alternatephone || '' });
         } else {
           setSelectedAddressId(null);
@@ -236,7 +236,7 @@ export const Checkout: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => {
-                                setSelectedAddressId(a._id);
+                                setSelectedAddressId(a._id ?? null);
                                 setAddr({ building: a.building || '', area: a.area, landmark: a.landmark || '', city: a.city, state: a.state, pincode: a.pincode, country: a.country, alternatephone: a.alternatephone || '' });
                                 setShowNewForm(false);
                               }}
@@ -284,7 +284,7 @@ export const Checkout: React.FC = () => {
                               </button>
                               <button
                                 type="button"
-                                onClick={e => { e.stopPropagation(); deleteAddress(a._id); }}
+                                onClick={e => { e.stopPropagation(); a._id && deleteAddress(a._id); }}
                                 className={`flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg transition-colors ${
                                   isDark ? 'text-slate-400 hover:text-red-400 hover:bg-red-400/10' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'
                                 }`}
@@ -326,7 +326,7 @@ export const Checkout: React.FC = () => {
                               <div className="flex gap-2 pt-1">
                                 <button
                                   type="button"
-                                  onClick={() => saveEdit(a._id)}
+                                  onClick={() => a._id && saveEdit(a._id)}
                                   disabled={editSaving}
                                   className="flex-1 py-1.5 bg-yellow-400 text-black text-xs font-black rounded-lg hover:bg-yellow-300 transition-colors flex items-center justify-center gap-1 disabled:opacity-60"
                                 >
@@ -361,7 +361,7 @@ export const Checkout: React.FC = () => {
                     setAddr({ ...EMPTY_ADDR });
                   } else if (savedAddresses.length > 0) {
                     const first = savedAddresses[0];
-                    setSelectedAddressId(first._id);
+                    setSelectedAddressId(first._id ?? null);
                     setAddr({ building: first.building || '', area: first.area, landmark: first.landmark || '', city: first.city, state: first.state, pincode: first.pincode, country: first.country, alternatephone: first.alternatephone || '' });
                   }
                 }}

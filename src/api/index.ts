@@ -222,6 +222,7 @@ export interface OrderItem {
   productName: string;
   price: number;
   quantity: number;
+  sku?: string;
 }
 
 export interface Order {
@@ -229,9 +230,12 @@ export interface Order {
   orderNumber: string;
   items: OrderItem[];
   totalAmount: number;
+  subtotal?: number;
+  shippingCost?: number;
   status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   shippingAddress?: Address;
   paymentMethod?: 'ONLINE' | 'COD';
+  user?: { name?: string; phone?: string; email?: string };
   notes?: string;
   cancelReason?: string;
   createdAt: string;
@@ -304,6 +308,7 @@ export interface RFQ {
   status: 'DRAFT' | 'SUBMITTED' | 'UNDER_REVIEW' | 'QUOTED' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
   items: RFQItem[];
   totalEstimatedValue: number;
+  user?: { name?: string; phone?: string; email?: string };
   notes?: string;
   adminNotes?: string;
   expiresAt?: string;
@@ -363,7 +368,7 @@ export interface Shipment {
   freightClass?: string;
   weight?: number;
   events: ShipmentEvent[];
-  order?: { orderNumber: string; totalAmount: number };
+  order?: { orderNumber: string; totalAmount: number; user?: { name?: string; phone?: string; email?: string } };
   createdAt: string;
 }
 
