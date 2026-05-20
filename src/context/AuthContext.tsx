@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+'use client'
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authApi, userApi } from '../api';
 import { parseNameFromEmail, decodeTokenRole, isTokenExpired } from '../utils/authUtils';
 
@@ -24,26 +26,22 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
     try {
       const tok = localStorage.getItem('buildmore_token');
-      if (tok && isTokenExpired(tok)) return null;
+      if (!tok || isTokenExpired(tok)) {
+        localStorage.removeItem('buildmore_token');
+        localStorage.removeItem('buildmore_user');
+        return;
+      }
       const stored = localStorage.getItem('buildmore_user');
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const [token, setToken] = useState<string | null>(() => {
-    const stored = localStorage.getItem('buildmore_token');
-    if (stored && isTokenExpired(stored)) {
-      localStorage.removeItem('buildmore_token');
-      localStorage.removeItem('buildmore_user');
-      return null;
-    }
-    return stored;
-  });
+      if (stored) setUser(JSON.parse(stored));
+      setToken(tok);
+    } catch { /* ignore */ }
+  }, []);
 
   const persistAuth = (user: User, token: string) => {
     setUser(user);

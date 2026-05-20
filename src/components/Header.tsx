@@ -1,23 +1,30 @@
+'use client'
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, MapPin, ShoppingCart, ChevronDown, Sun, Moon, LogOut, ShieldCheck, User, Package, FileText, Heart, ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { SearchBar } from './SearchBar';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { formatPrice } from '../utils/currency';
 import { LocationModal, getStoredLocation } from './LocationModal';
-import { BuildMoreLogo } from './BuildMoreLogo';
 
 export const Header: React.FC = () => {
+  const LOGISTICS_FFEE = 450;
   const { totalItems, totalValue } = useCart();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { isDark, toggleDark, isBoxed, toggleBoxed } = useTheme();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
   const [locationOpen, setLocationOpen] = useState(false);
-  const [location, setLocation] = useState(() => getStoredLocation());
+  const [location, setLocation] = useState('');
+
+  useEffect(() => {
+    setLocation(getStoredLocation());
+  }, []);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -58,7 +65,7 @@ export const Header: React.FC = () => {
                   onChange={setSearchQuery}
                   autoFocus
                   placeholder="Search materials, tools..."
-                  onSubmit={q => navigate(`/products?search=${encodeURIComponent(q)}`)}
+                  onSubmit={q => router.push(`/products?search=${encodeURIComponent(q)}`)}
                   onNavigate={() => { setMobileSearchOpen(false); setSearchQuery(''); }}
                 />
               </div>
@@ -70,8 +77,9 @@ export const Header: React.FC = () => {
 
             {/* Left: Logo + Location */}
             <div className="flex items-center gap-4 lg:gap-8 shrink-0">
-              <Link to="/" className="flex items-center">
-                <BuildMoreLogo height={48} isDark={isDark} />
+              <Link href="/" className="flex items-center gap-0.5">
+                <span className={`text-xl font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Build</span>
+                <span className="text-xl font-black uppercase tracking-tighter text-yellow-400">More</span>
               </Link>
 
               <button
@@ -94,7 +102,7 @@ export const Header: React.FC = () => {
                 value={searchQuery}
                 onChange={setSearchQuery}
                 placeholder="Search for materials, tools, and more..."
-                onSubmit={q => { navigate(`/products?search=${encodeURIComponent(q)}`); setSearchQuery(''); }}
+                onSubmit={q => { router.push(`/products?search=${encodeURIComponent(q)}`); setSearchQuery(''); }}
                 onNavigate={() => setSearchQuery('')}
               />
             </div>
@@ -179,7 +187,7 @@ export const Header: React.FC = () => {
                       {isAdmin && (
                         <div className={`px-3 pt-2 pb-1 border-b ${isDark ? 'border-white/5' : 'border-slate-100'}`}>
                           <Link
-                            to="/admin/dashboard"
+                            href="/admin/dashboard"
                             onClick={() => setProfileOpen(false)}
                             className="flex items-center gap-3 px-3 py-2 rounded-lg bg-yellow-400/10 hover:bg-yellow-400/20 transition-colors"
                           >
@@ -199,7 +207,7 @@ export const Header: React.FC = () => {
                         ].map(({ to, icon: Icon, label }) => (
                           <Link
                             key={to}
-                            to={to}
+                            href={to}
                             onClick={() => setProfileOpen(false)}
                             className={`flex items-center gap-3 px-4 py-2.5 text-xs font-semibold transition-colors ${isDark ? 'text-slate-300 hover:bg-white/5 hover:text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
                           >
@@ -222,7 +230,7 @@ export const Header: React.FC = () => {
                   )}
                 </div>
               ) : (
-                <Link to="/auth" className="flex flex-col cursor-pointer group text-right">
+                <Link href="/auth" className="flex flex-col cursor-pointer group text-right">
                   <span className="text-[10px] leading-tight text-slate-500 font-bold">Account</span>
                   <div className="flex items-center gap-1.5 justify-end">
                     <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Sign In</span>
@@ -232,7 +240,7 @@ export const Header: React.FC = () => {
               )}
 
               {/* Cart */}
-              <Link to="/cart" className="relative flex items-center gap-2 cursor-pointer group">
+              <Link href="/cart" className="relative flex items-center gap-2 cursor-pointer group">
                 <div className="relative">
                   <div className="p-2 bg-yellow-400 rounded-lg group-hover:bg-yellow-300 transition-colors shadow-sm">
                     <ShoppingCart className="w-5 h-5 text-black" />
@@ -245,7 +253,7 @@ export const Header: React.FC = () => {
                 </div>
                 <div className="hidden sm:flex flex-col">
                   <span className="text-[10px] text-slate-500 font-bold">Cart Total</span>
-                  <span className="text-xs font-bold text-yellow-400">{formatPrice(totalValue)}</span>
+                  <span className="text-xs font-bold text-yellow-400">{formatPrice(totalValue + (totalItems > 0 ? LOGISTICS_FFEE : 0))}</span>
                 </div>
               </Link>
 

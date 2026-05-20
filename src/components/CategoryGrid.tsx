@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getCategoryMeta } from '../utils/categoryMeta';
 import { useCategories } from '../context/CategoryContext';
@@ -110,7 +112,7 @@ export const CategoryGrid: React.FC = () => {
               return (
                 <Link
                   key={cat._id}
-                  to={`/products/${cat.slug}`}
+                  href={`/products/${cat.slug}`}
                   className="group relative shrink-0 rounded-2xl overflow-hidden block"
                   style={{ width: CARD_W, height: Math.round(CARD_W * 1.25) }}
                 >

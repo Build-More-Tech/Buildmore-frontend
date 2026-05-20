@@ -1,6 +1,8 @@
+'use client'
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, X, Clock, TrendingUp, ArrowRight, ChevronRight, Layers } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { BackendProduct, Category, productApi } from '../api';
 import { normalizeProduct } from '../utils/normalizeProduct';
 import { formatPrice } from '../utils/currency';
@@ -100,7 +102,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = 'Search products, categories...',
 }) => {
   const { isDark } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { categories: ctxCategories } = useCategories();
 
   // Resolved data — use props if provided, else fall back to context / internal fetch
@@ -174,7 +176,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         onSelectCategory(item.cat);
       } else {
         const slug = item.cat.slug || item.cat.name.toLowerCase().replace(/\s+/g, '-');
-        navigate(`/products/${slug}`);
+        router.push(`/products/${slug}`);
         onNavigate?.();
       }
 
@@ -182,11 +184,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       const norm = normalizeProduct(item.product);
       saveRecent(item.product.productName);
       setRecent(getRecent());
-      navigate(`/product/${norm.id}`);
+      router.push(`/product/${norm.id}`);
       setOpen(false); setCursor(-1);
       onNavigate?.();
     }
-  }, [onChange, onSelectCategory, onSubmit, onNavigate, navigate]);
+  }, [onChange, onSelectCategory, onSubmit, onNavigate, router]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') { setOpen(false); setCursor(-1); return; }

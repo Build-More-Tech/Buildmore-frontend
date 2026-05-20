@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, MapPin, Crosshair, Loader2, CheckCircle, Clock } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -10,6 +12,7 @@ const POPULAR_CITIES = [
 ];
 
 export function getStoredLocation(): string {
+  if (typeof window === 'undefined') return '';
   return localStorage.getItem(STORAGE_KEY) || '';
 }
 

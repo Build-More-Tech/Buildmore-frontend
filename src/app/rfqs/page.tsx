@@ -1,0 +1,14 @@
+import type { Metadata } from 'next'
+import { Suspense } from 'react'
+import { MainLayout } from '@/src/layouts/MainLayout'
+import { ProtectedRoute } from '@/src/components/ProtectedRoute'
+import { RFQs } from '@/src/views/RFQs'
+
+export const metadata: Metadata = {
+  title: 'Quote Requests (RFQs)',
+  robots: { index: false, follow: false },
+}
+
+export default function Page() {
+  return <MainLayout><ProtectedRoute><Suspense fallback={null}><RFQs /></Suspense></ProtectedRoute></MainLayout>
+}

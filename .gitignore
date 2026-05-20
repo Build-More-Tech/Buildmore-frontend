@@ -8,3 +8,4 @@ skills-lock.json
 *.log
 .env*
 !.env.example
+.next/ 

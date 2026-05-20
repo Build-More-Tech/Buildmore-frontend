@@ -1,4 +1,6 @@
-import React from 'react';
+'use client'
+
+import React, { Suspense } from 'react';
 import { Header } from '../components/Header';
 import { SubNav } from '../components/SubNav';
 import { Footer } from '../components/Footer';
@@ -17,7 +19,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, isHome, noPadd
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-500 selection:bg-yellow-400 selection:text-black ${isDark ? 'bg-[#0A0A0A]' : 'bg-[#F8F9FA]'}`}>
       <Header />
-      <SubNav />
+      <Suspense fallback={null}><SubNav /></Suspense>
       <main className={`${maxW} mx-auto w-full flex-1 ${noPadding ? '' : 'px-4 sm:px-6 py-5 sm:py-8 space-y-6 sm:space-y-8'}`}>
         <ErrorBoundary>
           {children}
